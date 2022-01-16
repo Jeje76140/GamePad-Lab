@@ -95,3 +95,12 @@ button:hover{
   align-items: center;
   justify-content: space-between;
 }
+.col-1::after{
+  content:'';
+  width: 10px;
+  height: 57%;
+  background: linear-gradient(#04E593, #1DCCDF);
+  position: absolute;
+  left: -40px;
+  top: 8px;
+}
