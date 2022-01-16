@@ -7,29 +7,20 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div class="wrapper">
-      <div class="images">
-        <div class="img-1"></div>
-        <div class="img-2"></div>
-      </div>
-      <div class="slider">
-        <div class="drag-line">
-          <span></span>
-        </div>
-        <input type="range" min="0" max="100" value="50">
+    <div class="container">
+      <div class="navbar">
+        <img src="images/logo.png" class="logo">
+        <nav>
+          <ul>
+            <li><a href="">Page 1 (jsp encore wsh...)</a></li>
+            <li><a href="">Page 2 (jsp encore wsh...)</a></li>
+            <li><a href="">Page 3 (jsp encore wsh...)</a></li>
+            <li><a href="">Page 4 (jsp encore wsh...)</a></li>
+          </ul>
+        </nav>
+        <img src="images/menu.png" class="menu-icon">
       </div>
     </div>
-
-    <script>
-      const slider = document.querySelector(".slider input");
-      const img = document.querySelector(".images .img-2");
-      const dragLine = document.querySelector(".slider .drag-line");
-      slider.oninput = ()=>{
-        let sliderVal = slider.value;
-        dragLine.style.left = sliderVal + "%";
-        img.style.width = sliderVal + "%";
-      }
-    </script>
-
+    
   </body>
 </html>
