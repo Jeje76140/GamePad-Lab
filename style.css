@@ -80,7 +80,7 @@ button{
   background: linear-gradient(to right, #1DCCDF, #04E593);
   border-radius: 6px;
   cursor: pointer;
-  transition: width 0,5s;
+  transition: width 0.5s;
 }
 button img{
   width: 30px;
