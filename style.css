@@ -78,4 +78,10 @@ button{
   outline: none;
   color: #fff;
   background: linear-gradient(to right, #1DCCDF, #04E593);
+  border-radius: 6px;
+  cursor: pointer;
+}
+button img{
+  width: 30px;
+  display: none;
 }
