@@ -103,4 +103,5 @@ button:hover{
   position: absolute;
   left: -40px;
   top: 8px;
+  border-radius: 4px;
 }
