@@ -24,6 +24,7 @@
 .menu-icon{
   width: 25px;
   cursor: pointer;
+  display: none;
 }
 nav{
   flex: 1;
@@ -124,4 +125,35 @@ button:hover{
   width: 80%;
   z-index: -1;
   transform: translateX(150px);
+}
+.social-links img{
+  height: 13px;
+  margin: 20px;
+  cursor: pointer;
+}
+.social-links{
+  text-align: center;
+}
+
+@media only screen and (max-width: 700px){
+
+  nav ul{
+    width: 100%;
+    background: linear-gradient(#1DCCDF, #04E593);
+    position: absolute;
+    top: 75px;
+    right: 0;
+    z-index: 2;
+  }
+  nav ul li{
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  nav ul li a{
+    color: #fff;
+  }
+  .menu-icon{
+    display: block;
+  }
 }
