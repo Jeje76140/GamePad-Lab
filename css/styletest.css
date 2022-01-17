@@ -43,6 +43,7 @@ nav ul li a{
 nav ul li a:hover{
   color: #1DCCDF;
 }
+(---------PS4--------)
 .row{
   display: flex;
   justify-content: space-between;
@@ -127,7 +128,7 @@ button:hover{
   transform: translateX(150px);
 }
 (---------PS5--------)
-.row-2{
+.row{
   display: flex;
   justify-content: space-between;
   align-items: center;
