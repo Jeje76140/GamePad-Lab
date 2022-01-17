@@ -43,7 +43,9 @@ nav ul li a{
 nav ul li a:hover{
   color: #1DCCDF;
 }
+
 /* Partie PS4 */
+
 .row{
   display: flex;
   justify-content: space-between;
@@ -127,7 +129,9 @@ button:hover{
   z-index: -1;
   transform: translateX(150px);
 }
+
 /* Partie PS5 */
+
 .row-2{
   display: flex;
   justify-content: space-between;
@@ -200,7 +204,7 @@ button2:hover{
 .col-4 .controller{
   width: 90%
 }
-.color-box{
+.color-box2{
   position: absolute;
   right: 0;
   top: 0;
