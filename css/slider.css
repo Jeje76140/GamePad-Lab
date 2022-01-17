@@ -1,3 +1,14 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,body{
+  display: grid;
+  height: 100%;
+  place-items: center;
+  background: #efefef;
+}
 .wrapper{
   position: relative;
   height: 500px;
@@ -15,7 +26,7 @@
 .wrapper .images .img-1{
   height: 100%;
   width: 100%;
-  background: url("images/PS4-.png") no-repeat;
+  background: url("images/PS4.png") no-repeat;
   /* background: url("images/car.jpg") no-repeat; */
 }
 .wrapper .images .img-2{
