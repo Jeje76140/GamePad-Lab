@@ -37,7 +37,7 @@ img{
     -webkit-appearance: none;
     height: 40px;
     width: 40px;
-    background: url("images/slider-icon.svg"),
+    background: url("https://amazing-pare-e282f2.netlify.app/images/slider-icon.svg"),
     rgba(255,255,255,0.3);
     border: 3px solid #ffffff;
     border-radius: 50%;
