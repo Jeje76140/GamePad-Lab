@@ -22,6 +22,21 @@
         </nav>
         <img src="images/menu.png" class="menu-icon" onclick="togglemenu()">
       </div>
+      
+      <div class="row">
+        <div class="col-1">
+          <h2>PlayStation<br>Dualshock 4</h2>
+          <h3>Superposition de PlayStation 4</h3>
+          <p>(PS4 controller overlay)</p>
+          <h4><strike>19,99€</strike> Gratuit</h4>
+          <button type="button">Personnaliser<img src="images/arrow.png">
+          </button>
+        </div>
+        <div class="col-2">
+          <img src="images/PS4.png" class="controller">
+          <div class="color-box"></div>
+          </div>
+        </div>
     
         <div class="social-links">
           <a href="https://twitter.com/Jeje_76140" target="_blank"><img src="images/tw.png" title="Twitter"></a>
@@ -30,5 +45,45 @@
         </div>
         
     </div
+      
+      <div class="wrapper">
+      <div class="images">
+        <div class="img-1"></div>
+        <div class="img-2"></div>
+      </div>
+      <div class="slider">
+        <div class="drag-line">
+          <span></span>
+        </div>
+        <input type="range" min="0" max="100" value="50">
+      </div>
+    </div>
+    <script>
+      const slider = document.querySelector(".slider input");
+      const img = document.querySelector(".images .img-2");
+      const dragLine = document.querySelector(".slider .drag-line");
+      slider.oninput = ()=>{
+        let sliderVal = slider.value;
+        dragLine.style.left = sliderVal + "%";
+        img.style.width = sliderVal + "%";
+      }
+    </script>
+    
+      
+      <script>
+      var menuList = document.getElementById("menuList");
+      menuList.style.maxHeight = "0px";
+      function togglemenu(){
+        if(menuList.style.maxHeight == "0px")
+          {
+            menuList.style.maxHeight = "130px"
+          }
+        else
+          {
+            menuList.style.maxHeight = "0px";
+          }
+      }
+    </script>
+    
   </body>
 </html>
