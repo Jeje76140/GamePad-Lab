@@ -7,6 +7,31 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="shortcut icon" href="images/Logo.png">
+   <style type="text/css">
+     .box{
+      position:absolute;
+      width: 535px;
+       height:300px;
+     }
+     textarea{
+      width: inherit;
+       height: inherit;
+       max-width:100%
+       position:absolute;
+       background:url(images/PS4.png);
+       background-size:cover;
+       outline:none;
+       border:none;
+     }
+     #a{
+      resize:none;
+       filter:grayscale(1);
+     }
+     #b{
+      resize:horizontal;
+       width:50%;
+     }
+   </style>
   </head>
   <body>
     <div class="container">
@@ -22,6 +47,11 @@
         </nav>
         <img src="images/menu.png" class="menu-icon" onclick="togglemenu()">
       </div>
+      
+      <div class="box">
+        <textarea id="a" readonly=""></textarea>
+        <textarea id="b" readonly=""></textarea>
+      </div>     
       
       <div class="row">
         <div class="col-1">
