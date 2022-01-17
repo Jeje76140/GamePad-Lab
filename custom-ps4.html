@@ -4,24 +4,62 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EN DÉV - GamePad Lab</title>
-    <link rel="stylesheet" href="css/slider.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/footer.css">
     <link rel="shortcut icon" href="images/Logo.png">
   </head>
   <body>
     <div class="container">
-        <img src="https://amazing-pare-e282f2.netlify.app/images/PS4-.png">
-        <img id="my-img" src="https://amazing-pare-e282f2.netlify.app/images/PS4.png" style="clip-path: polygon(0px 0px, 50% 0px, 50% 100%, 0px 100%);">
-        <input type="range" min="0" max="100" value="50" id="slider" oninput="slide()">
+      <div class="navbar">
+        <img src="images/Logo.png" class="logo">
+        <nav>
+          <ul id="menuList">
+            <li><a href="custom-ps4.html">Personnalisation PS4</a></li>
+            <li><a href="custom-ps5.html">Personnalisation PS5</a></li>
+            <li><a href="custom-xbox1.html">Personnalisation XBOX1</a></li>
+            <li><a href="support.html">Support</a></li>
+          </ul>
+        </nav>
+        <img src="images/menu.png" class="menu-icon" onclick="togglemenu()">
+      </div>
+      
+      <div class="row">
+        <div class="col-1">
+          <h2>PlayStation<br>Dualshock 4</h2>
+          <h3>Superposition de PlayStation 4</h3>
+          <p>(PS4 controller overlay)</p>
+          <h4><strike>19,99€</strike> Gratuit</h4>
+          <button type="button">Personnaliser<img src="images/arrow.png">
+          </button>
+        </div>
+        <div class="col-2">
+          <img src="images/PS4.png" class="controller">
+          <div class="color-box"></div>
+          </div>
+        </div>
     </div>
-
-
+    
+        <div class="social-links">
+          <a href="https://twitter.com/Jeje_76140" target="_blank"><img src="images/tw.png" title="Twitter"></a>
+          <a href="https://twitch.com/Jeje_76140" target="_blank"><img src="images/twc.png" title="Twitch"></a>
+          <a href="https://discord.gg/WCDCta8mbS" target="_blank"><img src="images/dc.png" title="Discord"></a>
+        </div>
+        
+    </div>
     
     <script>
-      function slide(){
-      let slideValue = document.getElementById("slider").value;
-      document.getElementById("my-img").style.clipPath = "polygon(0 0," + slideValue + "% 0," + slideValue + "% 100%, 0 100%)";
-      console.log("polygon(0 0," + slideValue + "% 0," + slideValue + "% 100%, 0 100%)");}
+      var menuList = document.getElementById("menuList");
+      menuList.style.maxHeight = "0px";
+      function togglemenu(){
+        if(menuList.style.maxHeight == "0px")
+          {
+            menuList.style.maxHeight = "130px"
+          }
+        else
+          {
+            menuList.style.maxHeight = "0px";
+          }
+      }
     </script>
-
-</body>
+  </body>
 </html>
