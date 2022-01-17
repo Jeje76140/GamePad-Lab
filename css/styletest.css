@@ -126,6 +126,12 @@ button:hover{
   z-index: -1;
   transform: translateX(150px);
 }
+.row-2{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 100px 0;
+}
 .social-links img{
   height: 13px;
   margin: 20px;
