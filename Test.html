@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!-- Created By Jerome B -->
+<html lang="fr" dir="ltr">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test GamePad-Lab</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="shortcut icon" href="images/Logo.png">
+  </head>
+  <body>
+    <div class="container">
+      <div class="navbar">
+        <img src="images/Logo.png" class="logo">
+        <nav>
+          <ul id="menuList">
+            <li><a href="">Page 1 (jsp encore wsh...)</a></li>
+            <li><a href="">Page 2 (jsp encore wsh...)</a></li>
+            <li><a href="">Page 3 (jsp encore wsh...)</a></li>
+            <li><a href="">Page 4 (jsp encore wsh...)</a></li>
+          </ul>
+        </nav>
+        <img src="images/menu.png" class="menu-icon" onclick="togglemenu()">
+      </div>
+      
+      <div class="row">
+        <div class="col-1">
+          <h2>PlayStation<br>Dualshock 4</h2>
+          <h3>Superposition de PlayStation 4</h3>
+          <p>(Overlay PS4)</p>
+          <h4><strike>19,99€</strike> Gratuit</h4>
+          <button type="button">Personnaliser<img src="images/arrow.png">
+          </button>
+        </div>
+        <div class="col-2">
+          <img src="images/PS4.png" class="controller">
+          <div class="color-box"></div>
+          </div>
+        </div>
+      </div>
+        
+        <div class="social-links">
+          <img src="images/fb.png">
+          <a href="https://twitter.com/Jeje_76140" target="_blank"><img src="images/tw.png" title="Twitter"></a>
+          <img src="images/ig.png">
+        </div>
+        
+    </div>
+    
+    <script>
+      var menuList = document.getElementById("menuList");
+      menuList.style.maxHeight = "0px";
+      function togglemenu(){
+        if(menuList.style.maxHeight == "0px")
+          {
+            menuList.style.maxHeight = "130px"
+          }
+        else
+          {
+            menuList.style.maxHeight = "0px";
+          }
+      }
+    </script>
+  </body>
+</html>
