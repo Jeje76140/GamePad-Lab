@@ -86,18 +86,15 @@ button{
   cursor: pointer;
   transition: width 0.5s;
 }
-button img{
-  width: 30px;
-  display: none;
+button a{
+  text-decoration: none;
+  color: #fff;
+  font-size: 14px;
 }
-button:hover img{
-  display: block;
-}
-button:hover{
-  width: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+button a:hover{
+  text-decoration: none;
+  color: #000;
+  font-size: 14px;
 }
 .col-1::after{
   content:'';
