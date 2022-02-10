@@ -1,132 +1,73 @@
-<html>
-<head>
+<html><head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-* {box-sizing: border-box;}
+*,
+*:before,
+*:after{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    height: 100vh;
+    display: grid;
+    background: #d1ebec;
+    place-items: center;
+}
+    .container{
+    height: 62.5vmin;
+    width: 100vmin;
+    position: relative;
+    overflow: hidden;
 
-.img-comp-container {
-  position: relative;
-  height: 400px; /*doit être de la même hauteur que les images*/
+}
+    img{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+    #my-img{
+    clip-path: polygon(0 0 , 50% 0, 50% 100%, 0 100%);
 }
 
-.img-comp-img {
-  position: absolute;
-  width: auto;
-  height: auto;
-  overflow:hidden;
+    #slider{
+    top: -65px;
+    position: relative;
+    -webkit-appearance: none;
+    width: calc( 100% + 40px);
+    height: 100%;
+    margin-left: -20px;
+    background-color: transparent;
+    outline: none;
 }
-
-.img-comp-img img {
-  display:block;
-  vertical-align:middle;
-}
-
-.img-comp-slider {
-  position: absolute;
-  z-index:9;
-  cursor: ew-resize;
-  /*définit l'apparence du curseur :*/
-  width: 20px;
-  height: 20px;
-  background-color: #2196F3;
-  opacity: 0.7;
-  border-radius: 50%;
+#slider::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    height: 25px;
+    width: 25px;
+    background: url("slider-icon.svg"),
+    rgba(255,255,255,0.3);
+    border: 4px solid white;
+    border-radius: 100%;
+    background-size: contain;
+    cursor: pointer;
 }
 </style>
 <script>
-function initComparisons() {
-  var x, i;
-  /*trouver tous les éléments avec une classe "overlay":*/
-  x = document.getElementsByClassName("img-comp-overlay");
-  for (i = 0; i < x.length; i++) {
-    /*une fois pour chaque élément "overlay":
-     passer l'élément "overlay" en paramètre lors de l'exécution de la fonction compareImages :*/
-    compareImages(x[i]);
-  }
-  function compareImages(img) {
-    var slider, img, clicked = 0, w, h;
-    /*récupérer la largeur et la hauteur de l'élément img*/
-    w = img.offsetWidth;
-    h = img.offsetHeight;
-    /*fixe la largeur de l'élément img à 50% :*/
-    img.style.width = (w / 2) + "px";
-    /*create slider:*/
-    slider = document.createElement("DIV");
-    slider.setAttribute("class", "img-comp-slider");
-    /*insert slider*/
-    img.parentElement.insertBefore(slider, img);
-    /*position the slider in the middle:*/
-    slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";
-    slider.style.left = (w / 2) - (slider.offsetWidth / 2) + "px";
-    /*execute a function when the mouse button is pressed:*/
-    slider.addEventListener("mousedown", slideReady);
-    /*and another function when the mouse button is released:*/
-    window.addEventListener("mouseup", slideFinish);
-    /*or touched (for touch screens:*/
-    slider.addEventListener("touchstart", slideReady);
-    /*and released (for touch screens:*/
-    window.addEventListener("touchend", slideFinish);
-    function slideReady(e) {
-      /*prevent any other actions that may occur when moving over the image:*/
-      e.preventDefault();
-      /*the slider is now clicked and ready to move:*/
-      clicked = 1;
-      /*execute a function when the slider is moved:*/
-      window.addEventListener("mousemove", slideMove);
-      window.addEventListener("touchmove", slideMove);
-    }
-    function slideFinish() {
-      /*the slider is no longer clicked:*/
-      clicked = 0;
-    }
-    function slideMove(e) {
-      var pos;
-      /*if the slider is no longer clicked, exit this function:*/
-      if (clicked == 0) return false;
-      /*get the cursor's x position:*/
-      pos = getCursorPos(e)
-      /*prevent the slider from being positioned outside the image:*/
-      if (pos < 0) pos = 0;
-      if (pos > w) pos = w;
-      /*execute a function that will resize the overlay image according to the cursor:*/
-      slide(pos);
-    }
-    function getCursorPos(e) {
-      var a, x = 0;
-      e = (e.changedTouches) ? e.changedTouches[0] : e;
-      /*get the x positions of the image:*/
-      a = img.getBoundingClientRect();
-      /*calculate the cursor's x coordinate, relative to the image:*/
-      x = e.pageX - a.left;
-      /*consider any page scrolling:*/
-      x = x - window.pageXOffset;
-      return x;
-    }
-    function slide(x) {
-      /*resize the image:*/
-      img.style.width = x + "px";
-      /*position the slider:*/
-      slider.style.left = img.offsetWidth - (slider.offsetWidth / 2) + "px";
-    }
-  }
+function slide(){
+    let slideValue = document.getElementById("slider").value;
+
+    document.getElementById("my-img").style.clipPath = "polygon(0 0," + slideValue + "% 0," + slideValue + "% 100%, 0 100%)";
+
+    console.log("polygon(0 0," + slideValue + "% 0," + slideValue + "% 100%, 0 100%)");
 }
 </script>
 </head>
 <body>
 
-<div class="img-comp-container">
-  <div class="img-comp-img">
-    <img src="https://amazing-pare-e282f2.netlify.app/images/PS4-.png" width="600" height="400">
-  </div>
-  <div class="img-comp-img img-comp-overlay">
-    <img src="https://amazing-pare-e282f2.netlify.app/images/PS4.png" width="600" height="400">
-  </div>
+<div class="container">
+    <img src="https://amazing-pare-e282f2.netlify.app/images/PS4-.png">
+    <img id="my-img" src="https://amazing-pare-e282f2.netlify.app/images/PS4.png"><input type="range" min="0" max="100" value="50" id="slider" oninput="slide()">
 </div>
+    
 
-<script>
-/*Exécute une fonction qui exécutera une fonction de comparaison d'image pour chaque élément avec la classe img-comp-overlay :*/
-initComparisons();
-</script>
-
-</body>
-</html>
+</body></html>
