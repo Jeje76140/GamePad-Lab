@@ -16,6 +16,11 @@
     overflow: hidden;
 
 }
+    #my-img1{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
     #my-img{
     clip-path: polygon(0 0 , 50% 0, 50% 100%, 0 100%);
 }
@@ -209,7 +214,7 @@ function slide(){
           </button>
         </div>
         <div class="col-2">
-          <img src="images/PS4-.png" class="controller">
+          <img id="my-img1" src="images/PS4-.png" class="controller">
           <img id="my-img" src="images/PS4.png" class="controller">
           <input type="range" min="0" max="100" value="50" id="slider" oninput="slide()">
           <div class="color-box"></div>
