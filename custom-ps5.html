@@ -6,7 +6,7 @@
 
 .img-comp-container {
   position: relative;
-  height: 200px; /*should be the same height as the images*/
+  height: 200px; /*doit être de la même hauteur que les images*/
 }
 
 .img-comp-img {
@@ -25,7 +25,7 @@
   position: absolute;
   z-index:9;
   cursor: ew-resize;
-  /*set the appearance of the slider:*/
+  /*définit l'apparence du curseur :*/
   width: 20px;
   height: 20px;
   background-color: #2196F3;
@@ -36,19 +36,19 @@
 <script>
 function initComparisons() {
   var x, i;
-  /*find all elements with an "overlay" class:*/
+  /*trouver tous les éléments avec une classe "overlay":*/
   x = document.getElementsByClassName("img-comp-overlay");
   for (i = 0; i < x.length; i++) {
-    /*once for each "overlay" element:
-    pass the "overlay" element as a parameter when executing the compareImages function:*/
+    /*une fois pour chaque élément "overlay":
+     passer l'élément "overlay" en paramètre lors de l'exécution de la fonction compareImages :*/
     compareImages(x[i]);
   }
   function compareImages(img) {
     var slider, img, clicked = 0, w, h;
-    /*get the width and height of the img element*/
+    /*récupérer la largeur et la hauteur de l'élément img*/
     w = img.offsetWidth;
     h = img.offsetHeight;
-    /*set the width of the img element to 50%:*/
+    /*fixe la largeur de l'élément img à 50% :*/
     img.style.width = (w / 2) + "px";
     /*create slider:*/
     slider = document.createElement("DIV");
@@ -124,7 +124,7 @@ function initComparisons() {
 </div>
 
 <script>
-/*Execute a function that will execute an image compare function for each element with the img-comp-overlay class:*/
+/*Exécute une fonction qui exécutera une fonction de comparaison d'image pour chaque élément avec la classe img-comp-overlay :*/
 initComparisons();
 </script>
 
