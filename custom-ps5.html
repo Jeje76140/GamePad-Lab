@@ -1,223 +1,136 @@
 <html><head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-*,
-*:before,
-*:after{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-    .container{
-    height: 62.5vmin;
-    width: 100vmin;
-    position: relative;
-    overflow: hidden;
-
-}
-    #my-img1{
-    position: absolute;
-}
-    #my-img{
-    clip-path: polygon(0 0 , 50% 0, 50% 100%, 0 100%);
-}
-
-    #slider{
-    top: -65px;
-    position: relative;
-    -webkit-appearance: none;
-    width: calc( 100% + 40px);
-    height: 100%;
-    margin-left: -20px;
-    background-color: transparent;
-    outline: none;
-}
-#slider::-webkit-slider-thumb{
-    -webkit-appearance: none;
-    height: 25px;
-    width: 25px;
-    background: url("slider-icon.svg"),
-    rgba(255,255,255,0.3);
-    border: 4px solid white;
-    border-radius: 100%;
-    background-size: contain;
-    cursor: pointer;
-}
-    
     *{
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
-}
-.container{
-  width: 100%;
-  min-height: 100vh;
-  padding-left: 8%;
-  padding-right: 8%;
   box-sizing: border-box;
-  overflow: hidden;
 }
-.navbar{
+html,body{
+  display: grid;
+  height: 100%;
+  place-items: center;
+  background: #efefef;
+}
+.wrapper{
+  position: relative;
+  height: 500px;
+  width: 750px;
+  overflow: hidden;
+  background: #fff;
+  border: 7px solid #fff;
+  box-shadow: 0px 0px 15px rgba(0,0,0,0.15);
+}
+.wrapper .images{
+  height: 100%;
   width: 100%;
   display: flex;
-  align-items: center;
 }
-.logo{
-  width: 50px;
-  cursor: pointer;
-  margin: 30px 0;
-}
-.menu-icon{
-  width: 25px;
-  cursor: pointer;
-  display: none;
-}
-nav{
-  flex: 1;
-  text-align: right;
-}
-nav ul li{
-  list-style: none;
-  display: inline-block;
-  margin-right: 30px;
-}
-nav ul li a{
-  text-decoration: none;
-  color: #000;
-  font-size: 14px;
-}
-nav ul li a:hover{
-  color: #1DCCDF;
-}
-
-/* Partie PS4 */
-
-.row{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 100px 0;
-}
-.col-1{
-  flex-basis: 40%;
-  position: relative;
-  margin-left: 50px;
-}
-.col-1 h2{
-  font-size: 54px;
-}
-.col-1 h3{
-  font-size: 30px;
-  color: #707070;
-  font-weight: 100;
-  margin: 20px 0 10px;
-}
-.col-1 p{
-  font-size: 16px;
-  color: #b7b7b7;
-  font-weight: 100;
-}
-.col-1 h4{
-  margin: 30px 0;
-  font-size: 20px;
-}
-button{
-  width: 140px;
-  border: 0;
-  padding: 12px 10px;
-  outline: none;
-  color: #fff;
-  background: linear-gradient(to right, #1DCCDF, #04E593);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: width 0.5s;
-}
-button a{
-  text-decoration: none;
-  color: #fff;
-  font-size: 14px;
-}
-button a:hover{
-  text-decoration: none;
-  color: #000;
-  font-size: 14px;
-}
-.col-1::after{
-  content:'';
-  width: 10px;
-  height: 57%;
-  background: linear-gradient(#1DCCDF, #04E593);
-  position: absolute;
-  left: -40px;
-  top: 8px;
-  border-radius: 5px;
-}
-.col-2{
-  position: relative;
-  flex-basis: 60%;
-  display: flex;
-  align-items: center;
-}
-.col-2 .controller{
-  width: 90%
-}
-.color-box{
-  position: absolute;
-  right: 0;
-  top: 0;
-  background: linear-gradient(#1DCCDF, #04E593);
-  border-radius: 20px 0 0 20px;
+.wrapper .images .img-1{
   height: 100%;
-  width: 80%;
-  z-index: -1;
-  transform: translateX(150px);
+  width: 100%;
+  background: url("https://amazing-pare-e282f2.netlify.app/images/PS4.png") no-repeat;
+  /* background: url("images/car.jpg") no-repeat; */
 }
-
-    
+.wrapper .images .img-2{
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  /* filter: blur(5px); */
+  background: url("https://amazing-pare-e282f2.netlify.app/images/PS4-.png") no-repeat;
+  /* background: url("images/car.png") no-repeat; */
+}
+.wrapper .slider{
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+}
+.wrapper .slider input{
+  width: 100%;
+  outline: none;
+  background: none;
+  -webkit-appearance: none;
+}
+.slider input::-webkit-slider-thumb{
+  height: 486px;
+  width: 3px;
+  background: none;
+  -webkit-appearance: none;
+  cursor: col-resize;
+}
+.slider .drag-line{
+  width: 3px;
+  height: 486px;
+  position: absolute;
+  left: 49.85%;
+  pointer-events: none;
+}
+.slider .drag-line::before,
+.slider .drag-line::after{
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 222px;
+  background: #fff;
+}
+.slider .drag-line::before{
+  top: 0;
+}
+.slider .drag-line::after{
+  bottom: 0;
+}
+.slider .drag-line span{
+  height: 42px;
+  width: 42px;
+  border: 3px solid #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.slider .drag-line span::before,
+.slider .drag-line span::after{
+  position: absolute;
+  content: "";
+  top: 50%;
+  border: 10px solid transparent;
+  border-bottom-width: 0px;
+  border-right-width: 0px;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.slider .drag-line span::before{
+  left: 40%;
+  border-left-color: #fff;
+}
+.slider .drag-line span::after{
+  left: 60%;
+  border-top-color: #fff;
+}
 </style>
-<script>
-function slide(){
-    let slideValue = document.getElementById("slider").value;
-
-    document.getElementById("my-img").style.clipPath = "polygon(0 0," + slideValue + "% 0," + slideValue + "% 100%, 0 100%)";
-
-    console.log("polygon(0 0," + slideValue + "% 0," + slideValue + "% 100%, 0 100%)");
-}
-</script>
-</head>
-<body>
-
-     <div class="container">
-      <div class="navbar">
-        <a href="index.html"><img src="images/Logo.png" class="logo"></a>
-        <nav>
-          <ul id="menuList">
-            <li><a href="custom-ps4.html">Personnalisation PS4</a></li>
-            <li><a href="custom-ps5.html">Personnalisation PS5</a></li>
-            <li><a href="custom-xbox1.html">Personnalisation XBOX1</a></li>
-            <li><a href="support.html">Support</a></li>
-          </ul>
-        </nav>
-        <img src="images/menu.png" class="menu-icon" onclick="togglemenu()">
+    <body>
+    <div class="wrapper">
+      <div class="images">
+        <div class="img-1"></div>
+        <div class="img-2"></div>
       </div>
-      
-      <div class="row">
-        <div class="col-1">
-          <h2>PlayStation<br>Dualshock 4</h2>
-          <h3>Superposition de PlayStation 4</h3>
-          <p>(PS4 controller overlay)</p>
-          <h4><strike>19,99€</strike> Gratuit</h4>
-          <button><a href="custom-ps4.html">Personnaliser</a>
-          </button>
+      <div class="slider">
+        <div class="drag-line">
+          <span></span>
         </div>
-        <div class="col-2">
-          <img id="my-img1" src="images/PS4-.png" class="controller">
-          <img id="my-img" src="images/PS4.png" class="controller">
-          <input type="range" min="0" max="100" value="50" id="slider" oninput="slide()">
-          <div class="color-box"></div>
-          </div>
-        </div>
-    
-
-</body></html>
+        <input type="range" min="0" max="100" value="50">
+      </div>
+    </div>
+    <script>
+      const slider = document.querySelector(".slider input");
+      const img = document.querySelector(".images .img-2");
+      const dragLine = document.querySelector(".slider .drag-line");
+      slider.oninput = ()=>{
+        let sliderVal = slider.value;
+        dragLine.style.left = sliderVal + "%";
+        img.style.width = sliderVal + "%";
+      }
+    </script>
+  </body>
+</html>
