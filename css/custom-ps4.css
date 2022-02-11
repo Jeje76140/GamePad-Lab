@@ -1,1 +1,15 @@
+.manette{
+  text-align: center;
+}
 
+.manette .controller{
+  width: 100vh;
+}
+
+.personnalisation{
+  text-align: center;
+}
+
+.personnalisation img{
+  height: 60px;
+}
