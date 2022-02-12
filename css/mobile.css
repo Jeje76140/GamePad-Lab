@@ -1,0 +1,27 @@
+.mobile-only{
+  visibility: hidden;
+  height: 0px;
+}
+@media only screen and (max-width: 700px){
+  body{
+    overflow: hidden;
+    background-color: white;
+  }
+  .mobile-only{
+    visibility: visible;
+    font-size: 18px;
+    text-transform: uppercase;
+    margin-top: 35vh;
+    transform: translateY(-50%);
+    text-align: center;
+  }
+  .mobile-only img{
+    height: 120px;
+  }
+  .container{
+    visibility: hidden;
+  }
+
+  .social-links{
+    visibility: hidden;
+  }
