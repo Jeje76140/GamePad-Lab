@@ -13,7 +13,7 @@
       <div class="navbar">
         <a href="index.html"><img src="images/Logo.png" class="logo"></a>
         <nav>
-          <ul id="menuList">
+          <ul id="menuList" style="max-height: 0px;">
             <li><a href="custom-ps4.html">Personnalisation PS4</a></li>
             <li><a href="custom-ps5.html">Personnalisation PS5</a></li>
             <li><a href="custom-xbox1.html">Personnalisation XBOX1</a></li>
@@ -21,7 +21,25 @@
           </ul>
         </nav>
         <img src="images/menu.png" class="menu-icon" onclick="togglemenu()">
-      </div>
+      </div><div class="dropdown">
+        <button class="bloc-top">
+            <span>Modifier</span>
+            <img src="https://raw.githubusercontent.com/Ziratsu/dropdown-anim/e1a0102ea13facb5f4bd0c72db5ae9329263a38f/ressources/add.svg">
+        </button>
+        <div class="bloc-links">
+            <ul>
+                <li>
+                    <a href="#">Lien 1</a>
+                </li>
+                <li>
+                    <a href="#">Lien 2</a>
+                </li>
+                <li>
+                    <a href="#">Lien 3</a>
+                </li>
+            </ul>
+        </div>
+    </div>
     
         <div class="social-links">
           <a href="https://twitter.com/Jeje_76140" target="_blank"><img src="images/tw.png" title="Twitter"></a>
@@ -30,6 +48,33 @@
         </div>
         
     </div>
+
+    
+
+
+    <script>
+
+const dropdown = document.querySelector(".dropdown");
+const btnDrop = document.querySelector(".bloc-top");
+
+
+let toggleIndex = 0;
+
+btnDrop.addEventListener('click', () => {
+
+    // console.log(dropdown.scrollHeight);
+
+    if(toggleIndex === 0){
+        dropdown.style.height = `${dropdown.scrollHeight}px`;
+        toggleIndex++;
+    } else {
+        dropdown.style.height = `${btnDrop.scrollHeight}px`;
+        toggleIndex--;
+    }
+
+})
+    
+</script>
     
     <script>
       var menuList = document.getElementById("menuList");
@@ -45,5 +90,7 @@
           }
       }
     </script>
-  </body>
+  
+
+</body>
 </html>
