@@ -71,5 +71,26 @@
           }
       }
     </script>
+    <script>
+      const coque = document.querySelector(".coque");
+const btnDrop = document.querySelector(".menu-coque");
+
+
+let toggleIndex = 0;
+
+btnDrop.addEventListener('click', () => {
+
+    // console.log(coque.scrollHeight);
+
+    if(toggleIndex === 0){
+        coque.style.height = `${coque.scrollHeight}px`;
+        toggleIndex++;
+    } else {
+     coque.style.height = `${btnDrop.scrollHeight}px`;
+        toggleIndex--;
+    }
+
+})
+    </script>
   </body>
 </html>
