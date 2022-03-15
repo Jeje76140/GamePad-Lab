@@ -23,21 +23,30 @@
         </nav>
         <img src="images/menu.png" class="menu-icon" onclick="togglemenu()">
       </div>
-    <div class="manette">
+    <div class="row">
+  <div class="manette">
         <img id="manette" src="https://amazing-pare-e282f2.netlify.app/images/PS4-.png" class="controller">
     </div>
-    <div class="personnalisation">
-        <a class="joystick gauche">
-<button onclick="document.getElementById('manette').src='https://amazing-pare-e282f2.netlify.app/images/PS4.png'"><img src="images/Stick gauche.png"></button>    
-        </a>
-        <a class="joystick droit"><button onclick="document.getElementById('manette').src='https://amazing-pare-e282f2.netlify.app/images/PS4-.png'"><img src="stickgauche.png"></button></a>
-        <a class="boutons"><button onclick="document.getElementById('manette').src='https://amazing-pare-e282f2.netlify.app/images/PS4-.png'"><img src="stickgauche.png"></button></a>
-        <a class="coque"><button onclick="document.getElementById('manette').src='https://amazing-pare-e282f2.netlify.app/images/PS4-.png'"><img src="stickgauche.png"></button></a>
-        <a class="start"><button onclick="document.getElementById('manette').src='https://amazing-pare-e282f2.netlify.app/images/PS4-.png'"><img src="stickgauche.png"></button></a>
-        <a class="share"><button onclick="document.getElementById('manette').src='https://amazing-pare-e282f2.netlify.app/images/PS4-.png'"><img src="stickgauche.png"></button></a>
-        <a class="pavé tactile"><button onclick="document.getElementById('manette').src='https://amazing-pare-e282f2.netlify.app/images/PS4-.png'"><img src="stickgauche.png"></button></a>
-        <a class="bumper"><button onclick="document.getElementById('manette').src='https://amazing-pare-e282f2.netlify.app/images/PS4-.png'"><img src="stickgauche.png"></button></a>
-</div>
+
+ <div class="coque">
+        <button class="menu-coque">
+            <span>Coque</span>
+            <img src="https://raw.githubusercontent.com/Ziratsu/dropdown-anim/e1a0102ea13facb5f4bd0c72db5ae9329263a38f/ressources/add.svg">
+        </button>
+
+<input type="radio" name="color" id="color-1" checked hidden>
+        <input type="radio" name="color" id="color-2" hidden>
+        <input type="radio" name="color" id="color-3" hidden>
+      
+        <input type="radio" name="color" id="color-4" hidden>
+
+        <div class="product-nav">
+            <label for="color-1" onclick="document.getElementById('manette').src='https://amazing-pare-e282f2.netlify.app/images/PS4.png'"></label>
+            <label for="color-2" onclick="document.getElementById('manette').src='https://amazing-pare-e282f2.netlify.app/images/PS4-.png'"></label>
+            <label for="color-3"></label>
+            <label for="color-4"></label>
+        </div>    
+  </div>
     <div class="social-links">
           <a href="https://twitter.com/Jeje_76140" target="_blank"><img src="images/tw.png" title="Twitter"></a>
           <a href="https://twitch.com/Jeje_76140" target="_blank"><img src="images/twc.png" title="Twitch"></a>
