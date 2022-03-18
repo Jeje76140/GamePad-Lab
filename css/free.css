@@ -1,0 +1,24 @@
+.Akatsuki{
+  height: 250px;
+  width: 250px;
+  background: linear-gradient(to right, #1DCCDF, #04E593);
+  border-radius: 25px;
+  }
+
+img.Akatsuki {
+    margin-top: 25px;
+}
+
+.CosmicRed{
+  height: 250px;
+  width: 250px;
+  background: linear-gradient(to right, #04E593, #1DCCDF);
+  border-radius: 25px;
+  }
+
+.MidnightBlack{
+  height: 250px;
+  width: 250px;
+  background: linear-gradient(to right, #1DCCDF, #04E593);
+  border-radius: 25px;
+  }
