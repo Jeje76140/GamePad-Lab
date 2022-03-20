@@ -331,6 +331,13 @@ img.Akatsuki {
     margin-top: 25px;
 }
 
+.Blue{
+  height: 250px;
+  width: 250px;
+  background: linear-gradient(to right, #1DCCDF, #04E593);
+  border-radius: 25px;
+  }
+
 .CosmicRed{
   height: 250px;
   width: 250px;
@@ -339,6 +346,27 @@ img.Akatsuki {
   }
 
 .MidnightBlack{
+  height: 250px;
+  width: 250px;
+  background: linear-gradient(to right, #1DCCDF, #04E593);
+  border-radius: 25px;
+  }
+
+.Orange{
+  height: 250px;
+  width: 250px;
+  background: linear-gradient(to right, #1DCCDF, #04E593);
+  border-radius: 25px;
+  }
+
+.Pink{
+  height: 250px;
+  width: 250px;
+  background: linear-gradient(to right, #1DCCDF, #04E593);
+  border-radius: 25px;
+  }
+
+.Classic{
   height: 250px;
   width: 250px;
   background: linear-gradient(to right, #1DCCDF, #04E593);
