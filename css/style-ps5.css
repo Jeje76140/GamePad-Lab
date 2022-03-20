@@ -1,0 +1,15 @@
+html { 
+    overflow-x: hidden;
+    overflow-y: hidden; 
+} 
+
+iframe {
+    width: 2000px !important;
+    height: 2000px !important;
+    -webkit-transform: scale(0.4);
+    transform: scale(0.4);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0px 0px;
+    margin-top: -115px;
+    margin-left: 20%;
+}
