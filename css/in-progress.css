@@ -32,7 +32,7 @@ body {
 }
 
 .loader svg polygon {
-    stroke-dasharray: calc(2 / 3 * 3) calc(145 / 3) calc(145 / 3 * 3) calc(145 / 3);
+    stroke-dasharray: 145 76;
     stroke-dashoffset: 0;
     animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
 }
