@@ -5,31 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EN DÉV - GamePad Lab</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/custom-ps4.css">
     <link rel="stylesheet" href="css/footer.css">
-    <link rel="shortcut icon" href="images/Logo.png">
+    <link rel="shortcut icon" href="images/GPL.svg">
   </head>
   <body>
     <div class="container">
       <div class="navbar">
-        <a href="index.html"><img src="images/Logo.png" class="logo"></a>
+        <a href="index.html"><img src="images/GPL.svg" class="logo"></a>
         <nav>
           <ul id="menuList">
-            <li><a href="custom-ps4.html">Personnalisation PS4</a></li>
-            <li><a href="custom-ps5.html">Personnalisation PS5</a></li>
-            <li><a href="custom-xbox1.html">Personnalisation XBOX1</a></li>
-            <li><a href="support.html">Support</a></li>
+            <li><a href="in-progress.html">Personnalisation PS4</a></li>
+            <li><a href="in-progress.html">Personnalisation PS5</a></li>
+            <li><a href="in-progress.html">Personnalisation XBOX1</a></li>
+            <li><a href="free.html">Manette GRATUITE</a></li>
+            <li><a href="in-progress.html">Support</a></li>
           </ul>
         </nav>
         <img src="images/menu.png" class="menu-icon" onclick="togglemenu()">
       </div>
-    
-        <div class="social-links">
+      
+      <div class="bar">
+      <div class="steps">
+        <span class="circle active"></span>
+        <span class="circle"></span>
+        <span class="circle"></span>
+        <span class="circle"></span>
+        <span class="circle"></span>
+        <span class="circle"></span>
+        <span class="circle"></span>
+        <span class="circle"></span>
+        <span class="circle"></span>
+        <span class="circle"></span>
+        <div class="progress-bar">
+          <span class="indicator"></span>
+        </div>
+      </div>
+      <div class="buttons">
+        <button id="prev" disabled>Prev</button>
+        <button id="next">Next</button>
+      </div>
+    </div>
+      
+<div class="row">
+  <div class="manette">
+        <img id="manette" src="images/PS4-.png" class="controller">
+    </div>
+
+ <div class="coque">
+        <button class="menu-coque">
+            <span>Coque</span>
+            <img src="https://raw.githubusercontent.com/Ziratsu/dropdown-anim/e1a0102ea13facb5f4bd0c72db5ae9329263a38f/ressources/add.svg">
+        </button>
+
+<input type="radio" name="color" id="color-1" checked hidden>
+        <input type="radio" name="color" id="color-2" hidden>
+        <input type="radio" name="color" id="color-3" hidden>
+      
+        <input type="radio" name="color" id="color-4" hidden>
+
+        <div class="product-nav">
+            <label for="color-1" onclick="document.getElementById('manette').src='images/PS4.png'"></label>
+            <label for="color-2" onclick="document.getElementById('manette').src='images/PS4-.png'"></label>
+            <label for="color-3"></label>
+            <label for="color-4"></label>
+        </div>    
+    </div>
+</div>      
+    <div class="social-links">
           <a href="https://twitter.com/Jeje_76140" target="_blank"><img src="images/tw.png" title="Twitter"></a>
           <a href="https://twitch.com/Jeje_76140" target="_blank"><img src="images/twc.png" title="Twitch"></a>
           <a href="https://discord.gg/WCDCta8mbS" target="_blank"><img src="images/dc.png" title="Discord"></a>
         </div>
         
     </div>
+        
     
     <script>
       var menuList = document.getElementById("menuList");
@@ -45,5 +95,65 @@
           }
       }
     </script>
+    <script>
+      const coque = document.querySelector(".coque");
+const btnDrop = document.querySelector(".menu-coque");
+
+
+let toggleIndex = 0;
+
+btnDrop.addEventListener('click', () => {
+
+    // console.log(coque.scrollHeight);
+
+    if(toggleIndex === 0){
+        coque.style.height = `${coque.scrollHeight}px`;
+        toggleIndex++;
+    } else {
+     coque.style.height = `${btnDrop.scrollHeight}px`;
+        toggleIndex--;
+    }
+
+})
+    </script>
+    
+    <script>
+       //DOM Elements
+const circles = document.querySelectorAll(".circle"),
+  progressBar = document.querySelector(".indicator"),
+  buttons = document.querySelectorAll("button");
+
+let currentStep = 1;
+
+// function that updates the current step and updates the DOM
+const updateSteps = (e) => {
+  // update current step based on the button clicked
+  currentStep = e.target.id === "next" ? ++currentStep : --currentStep;
+
+  // loop through all circles and add/remove "active" class based on their index and current step
+  circles.forEach((circle, index) => {
+    circle.classList[`${index < currentStep ? "add" : "remove"}`]("active");
+  });
+
+  // update progress bar width based on current step
+  progressBar.style.width = `${((currentStep - 1) / (circles.length - 1)) * 100}%`;
+
+  // check if current step is last step or first step and disable corresponding buttons
+  if (currentStep === circles.length) {
+    buttons[1].disabled = true;
+  } else if (currentStep === 1) {
+    buttons[0].disabled = true;
+  } else {
+    buttons.forEach((button) => (button.disabled = false));
+  }
+};
+
+// add click event listeners to all buttons
+buttons.forEach((button) => {
+  button.addEventListener("click", updateSteps);
+});
+
+    </script>
+    
   </body>
 </html>
