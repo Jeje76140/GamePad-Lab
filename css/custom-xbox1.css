@@ -1,3 +1,10 @@
+.controller{
+  position:fixed;
+  left:0%;
+  bottom:0%;
+  height:85%;
+}
+
 .selection{
   position:fixed;
   width:30%;
