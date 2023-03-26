@@ -10,8 +10,6 @@
   flex-direction: column;
   align-items: center;
   gap: 40px;
-  max-width: 400px;
-  width: 100%;
 }
 .bar .steps {
   display: flex;
