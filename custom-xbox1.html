@@ -48,50 +48,15 @@
       </div>
     </div>
     </div>
-      
-    <script>
-      var menuList = document.getElementById("menuList");
-      menuList.style.maxHeight = "0px";
-      function togglemenu(){
-        if(menuList.style.maxHeight == "0px")
-          {
-            menuList.style.maxHeight = "130px"
-          }
-        else
-          {
-            menuList.style.maxHeight = "0px";
-          }
-      }
-    </script>
-    <script>
-      const coque = document.querySelector(".coque");
-const btnDrop = document.querySelector(".menu-coque");
-
-
-let toggleIndex = 0;
-
-btnDrop.addEventListener('click', () => {
-
-    // console.log(coque.scrollHeight);
-
-    if(toggleIndex === 0){
-        coque.style.height = `${coque.scrollHeight}px`;
-        toggleIndex++;
-    } else {
-     coque.style.height = `${btnDrop.scrollHeight}px`;
-        toggleIndex--;
-    }
-
-})
-    </script>
     
+//script progressbar      
     <script>
        //DOM Elements
 const circles = document.querySelectorAll(".circle"),
   progressBar = document.querySelector(".indicator"),
   buttons = document.querySelectorAll("button");
 
-let currentStep = 1;
+let currentStep = 2;
 
 // function that updates the current step and updates the DOM
 const updateSteps = (e) => {
@@ -109,7 +74,7 @@ const updateSteps = (e) => {
   // check if current step is last step or first step and disable corresponding buttons
   if (currentStep === circles.length) {
     buttons[1].disabled = true;
-  } else if (currentStep === 1) {
+  } else if (currentStep === 2) {
     buttons[0].disabled = true;
   } else {
     buttons.forEach((button) => (button.disabled = false));
