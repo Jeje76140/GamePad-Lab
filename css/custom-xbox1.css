@@ -43,6 +43,7 @@ button {
   outline: none;
   background: none;
   float:right;
+  width:auto;
 }
 
 .boutons{
