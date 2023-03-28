@@ -2,7 +2,7 @@ let progress = 10;
 const progressBar = document.querySelector(".progress-bar .progress");
 
 function updateProgressBar() {
-  progressBar.style.width = `${progress}%`;
+  progressBar.style.width = `${progress}`;
 }
 
 function increaseProgress() {
