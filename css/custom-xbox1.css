@@ -41,3 +41,8 @@ button {
   outline: none;
   background: none;
 }
+
+.boutons{
+  position: relative;
+  top: 4px;
+}
