@@ -73,9 +73,11 @@ function checkButtonStatus() {
   const decreaseButton = document.querySelector("#decreaseButton");
 
   if (progress >= 100) {
-    increaseButton.style.cursor = "not-allowed";
+    increaseButton.style.cursor = "not-allowed"
+    svgNext.style.fill:"#0e0e0e;
   } else {
-    increaseButton.style.cursor = "pointer";
+    increaseButton.style.cursor = "pointer"
+    svgNext.style.fill:"#3C3F3F;
   }
 
   if (progress <= 10) {
