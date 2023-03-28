@@ -20,39 +20,22 @@
   right:0%;
   bottom:0%;
 }
-.bar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-}
-.bar .steps {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-}
 
-.steps .progress-bar {
+.progress-bar {
   position: absolute;
   height: 4px;
   width: 100%;
   background: #e0e0e0;
-  z-index: -1;
 }
-.progress-bar .indicator {
-  position: absolute;
-  height: 100%;
-  width: 11,1111%;
-  background: linear-gradient(270deg, #1DCCDF -100%, #04E593 100%);
-  transition: all 300ms ease;
-}
-.bar .buttons {
-  display: flex;
-  gap: 20px;
-}
-.buttons button {
+
+.progress-bar .progress {
+    width: 10%;
+    height: 100%;
+    background: linear-gradient(270deg, #1DCCDF -100%, #04E593 100%);
+    transition: all 300ms ease;
+      }
+
+button {
   padding: 8px 25px;
   background: #4070f4;
   border: none;
@@ -63,11 +46,5 @@
   cursor: pointer;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
   transition: all 200ms linear;
-}
-.buttons button:active {
-  transform: scale(0.97);
-}
-.buttons button:disabled {
-  background: #87a5f8;
-  cursor: not-allowed;
+  margin-top:20px;
 }
