@@ -49,6 +49,7 @@ button {
 .boutons{
   position: relative;
   top: 4px;
+  height: 61px;
   border-bottom: 2px solid #e0e0e0;
   border-left: 2px solid #e0e0e0;
 }
