@@ -71,14 +71,11 @@ function decreaseProgress() {
 function checkButtonStatus() {
   const increaseButton = document.querySelector("#increaseButton");
   const decreaseButton = document.querySelector("#decreaseButton");
-  const svgButton = document.querySelector("#svgButton");
 
   if (progress >= 100) {
-    increaseButton.style.cursor = "not-allowed"
-    svgButton.style.fill:"#0e0e0e";
+    increaseButton.style.cursor = "not-allowed";
   } else {
-    increaseButton.style.cursor = "pointer"
-    svgButton.style.fill:"#3C3F3F";
+    increaseButton.style.cursor = "pointer";
   }
 
   if (progress <= 10) {
