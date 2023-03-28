@@ -29,29 +29,13 @@
       <img src="images/manette.png">
       </div>
         
-      <div class="selection">
-        <div class="bar">
-          <div class="steps">
-            <span class="circle active"></span>
-            <span class="circle"></span>
-            <span class="circle"></span>
-            <span class="circle"></span>
-            <span class="circle"></span>
-            <span class="circle"></span>
-            <span class="circle"></span>
-            <span class="circle"></span>
-            <span class="circle"></span>
-            <span class="circle"></span>
-         <div class="progress-bar">
-          <span class="indicator"></span>
-         </div>
-      </div>
-      <div class="buttons">
-        <button id="prev" disabled>Prev</button>
-        <button id="next">Next</button>
-      </div>
-    </div>
-    </div>
+<div class="selection">
+  <div class="progress-bar">
+    <div class="progress"></div>
+  </div>
+  <button id="decreaseButton"onclick="decreaseProgress()">Diminuer</button>
+  <button id="increaseButton"onclick="increaseProgress()">Augmenter</button>
+</div>
      
     <script>
        //DOM Elements
