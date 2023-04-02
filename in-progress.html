@@ -9,36 +9,37 @@
  <body>
     
     <div class="loading">
-  <div class="loader cercle">
-    <svg viewBox="0 0 80 80">
-        <circle id="test" cx="40" cy="40" r="32"></circle>
-    </svg>
-</div>
+      <div class="loader cercle">
+        <svg viewBox="0 0 80 80">
+          <circle id="test" cx="40" cy="40" r="32"></circle>
+        </svg>
+      </div>
 
-<div class="loader triangle">
-    <svg viewBox="0 0 86 80">
-        <polygon points="43 8 79 72 7 72"></polygon>
-    </svg>
-</div>
+      <div class="loader triangle">
+        <svg viewBox="0 0 86 80">
+          <polygon points="43 8 79 72 7 72"></polygon>
+        </svg>
+      </div>
 
-<div class="loader carre">
-    <svg viewBox="0 0 80 80">
-        <rect x="8" y="8" width="64" height="64"></rect>
-    </svg>
-</div>
-        </div>
-  <div id="popup" class="overlay">
-    <div class="popup">
-      <h2>Site en cours de développement...</h2>
-      <a href="index.html" class="cross">×</a>
-      <p>La personnalisation des manettes n'est pas encore disponible, mais pas d'inquiétude ! <br>Tu peux retrouver dès à présent des manettes dans la rubrique <a href="free.html"> manette gratuite</a> ou bien me contacter pour la réalisation de ta manette. <br>Merci pour ta patience, bisous !     </p>
-      
+      <div class="loader carre">
+        <svg viewBox="0 0 80 80">
+          <rect x="8" y="8" width="64" height="64"></rect>
+        </svg>
+      </div>
     </div>
-  </div>
-<script>
-setTimeout(function(){
-  document.getElementById('popup').style.display = 'block';
-}, 3000);
-     </script>
+    
+    <div id="popup" class="overlay">
+      <div class="popup">
+        <h2>Site en cours de développement...</h2>
+        <a href="index.html" class="cross">×</a>
+        <p>La personnalisation des manettes n'est pas encore disponible, mais pas d'inquiétude ! <br>Tu peux retrouver dès à présent des manettes dans la rubrique <a href="free.html"> manette gratuite</a> ou bien me contacter pour la réalisation de ta manette. <br>Merci pour ta patience, bisous !</p>
+      </div>
+    </div>
+    
+    <script>
+      setTimeout(function(){
+        document.getElementById('popup').style.display = 'block';
+      }, 3000);
+    </script>
 </body>
 </html>
