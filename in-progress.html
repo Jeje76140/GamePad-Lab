@@ -3,9 +3,6 @@
 <html lang="fr" dir="ltr"><head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EN DÉV - GamePad Lab</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/free.css">
-    <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/in-progress.css">
     <link rel="shortcut icon" href="images/GPL.svg">
   </head>
@@ -30,12 +27,6 @@
     </svg>
 </div>
         </div>
- 
-<div class="box">
-    <a href="#popup" class="button">+ d'informations
-    </a>
-  </div>
-
   <div id="popup" class="overlay">
     <div class="popup">
       <h2>Site en cours de développement...</h2>
@@ -44,5 +35,10 @@
       
     </div>
   </div>
+<script>
+setTimeout(function(){
+  document.getElementById('popup').style.display = 'block';
+}, 3000);
+     </script>
 </body>
 </html>
