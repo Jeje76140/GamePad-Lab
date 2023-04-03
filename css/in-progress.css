@@ -7,7 +7,7 @@ body {
   text-align: center;
 }
 .loader {
-    --path: #000000;
+    --path: #3C3F3F;
     --dot: #1DCCDF;
     --duration: 3s;
     width: 44px;
@@ -182,7 +182,7 @@ body {
   font-weight: bold;
   text-decoration: none;
   transition: 0.3s ease;
-  color: #333;
+  color: #3C3F3F;
 }
 .popup .cross:hover {
   color: #1DCCDF;
@@ -208,7 +208,7 @@ body {
   padding: 2em;
   padding-bottom: 0.75em;
   font-size: 32px;
-  
+  color: #3C3F3F;
 }
 
 .popup p{
@@ -217,6 +217,7 @@ body {
   padding-bottom:3em;
   line-height: 1.75;
   font-size: 18px;
+  color: #3C3F3F;
 }
 
 .popup a{
