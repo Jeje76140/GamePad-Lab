@@ -46,10 +46,18 @@ button {
   width:auto;
 }
 
-.boutons{
+.categories{
   position: relative;
   top: 4px;
   height: 61px;
+  border-bottom: 2px solid #e0e0e0;
+  border-left: 2px solid #e0e0e0;
+}
+
+.pattern-selection{
+  position: relative;
+  top: 4px;
+  height: 46px;
   border-bottom: 2px solid #e0e0e0;
   border-left: 2px solid #e0e0e0;
 }
