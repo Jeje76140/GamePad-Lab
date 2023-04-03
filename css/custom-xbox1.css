@@ -81,3 +81,25 @@ button {
   text-decoration: underline;
   text-decoration-thickness: 2px;
 }
+
+.colors {
+  position: relative;
+  top: 4px;
+  height: 100%;
+  border-bottom: 2px solid #e0e0e0;
+  border-left: 2px solid #e0e0e0;
+}
+
+.colors-selection {
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.red, .blue, .green, .yellow, .pink, .black, .white {
+  position: relative;
+  padding-bottom: 25%;
+  width: 25%;
+  border-bottom: 2px solid #e0e0e0;
+  border-right: 2px solid #e0e0e0;
+}
