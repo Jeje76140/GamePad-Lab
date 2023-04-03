@@ -88,18 +88,18 @@ button {
   height: 100%;
   border-bottom: 2px solid #e0e0e0;
   border-left: 2px solid #e0e0e0;
+  overflow: scroll;
 }
 
 .colors-selection {
-  overflow: auto;
   display: flex;
   flex-wrap: wrap;
+  overflow-x: auto;
 }
 
 .red, .blue, .green, .yellow, .pink, .black, .white {
-  position: relative;
-  padding-bottom: 25%;
-  width: 25%;
+  width: calc((100% - 2px * 3) / 3); /* soustraire la taille de la bordure pour chaque élément et diviser par le nombre d'éléments */
+  padding-bottom: calc((100% - 2px * 3) / 3); /* soustraire la taille de la bordure pour chaque élément et diviser par le nombre d'éléments */
   border-bottom: 2px solid #e0e0e0;
   border-right: 2px solid #e0e0e0;
 }
