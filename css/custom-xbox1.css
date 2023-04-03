@@ -61,3 +61,23 @@ button {
   border-bottom: 2px solid #e0e0e0;
   border-left: 2px solid #e0e0e0;
 }
+.pattern-selection {
+  display: flex;
+  align-items: center;
+}
+
+.pattern-selection div {
+  margin-left: 20px;
+  text-decoration: none;
+  color:#e0e0e0;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.pattern-selection div:hover {
+  color:#3C3F3F;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
