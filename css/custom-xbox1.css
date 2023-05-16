@@ -36,22 +36,21 @@
     background: linear-gradient(270deg, #1DCCDF -100%, #04E593 100%);
     transition: all 300ms ease;
       }
-
-button {
-  border: 0;
-  padding: 15px 15px 15px 0px;
-  outline: none;
-  background: none;
-  float:right;
-  width:auto;
-}
-
 .categories{
   position: relative;
   top: 4px;
   height: 61px;
   border-bottom: 2px solid #e0e0e0;
   border-left: 2px solid #e0e0e0;
+}
+
+.categories-button {
+  border: 0;
+  padding: 15px 15px 15px 0px;
+  outline: none;
+  background: none;
+  float:right;
+  width:auto;
 }
 
 .pattern-selection{
