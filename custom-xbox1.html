@@ -57,6 +57,9 @@
 <script>
 let progress = 10;
 const progressBar = document.querySelector(".progress-bar .progress");
+const category1 = document.querySelector("#category1");
+const category2 = document.querySelector("#category2");
+const category3 = document.querySelector("#category3");
 
 function updateProgressBar() {
   progressBar.style.width = `${progress}%`;
@@ -67,6 +70,13 @@ function increaseProgress() {
     progress += 10;
     updateProgressBar();
     checkButtonStatus();
+    if (progress === 20) {
+      category1.style.display = "none";
+      category2.style.display = "inline-block";
+    } else if (progress === 30) {
+      category2.style.display = "none";
+      category3.style.display = "inline-block";
+    }
   }
 }
 
@@ -75,6 +85,13 @@ function decreaseProgress() {
     progress -= 10;
     updateProgressBar();
     checkButtonStatus();
+    if (progress === 20) {
+      category3.style.display = "none";
+      category2.style.display = "inline-block";
+    } else if (progress === 10) {
+      category2.style.display = "none";
+      category1.style.display = "inline-block";
+    }
   }
 }
 
