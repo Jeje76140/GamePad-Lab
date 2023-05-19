@@ -92,7 +92,7 @@ function checkButtonStatus() {
   const decreaseButton = document.querySelector("#decreaseButton");
   const increaseSVG = document.querySelector("#increaseSVG");
   const decreaseSVG = document.querySelector("#decreaseSVG");
-    
+
   if (progress >= 100) {
     increaseButton.style.cursor = "not-allowed";
     increaseSVG.setAttribute("fill", "#e0e0e0");
@@ -109,3 +109,24 @@ function checkButtonStatus() {
     decreaseSVG.setAttribute("fill", "#3C3F3F");
   }
 }
+
+const colorChoice = document.getElementById("colorChoice");
+const patternChoice = document.getElementById("patternChoice");
+
+colorChoice.addEventListener("click", selectColor);
+patternChoice.addEventListener("click", selectPattern);
+
+function selectColor() {
+  colorChoice.classList.add("selected");
+  patternChoice.classList.remove("selected");
+  // Ajoutez ici le code pour gérer la sélection de la couleur
+}
+
+function selectPattern() {
+  patternChoice.classList.add("selected");
+  colorChoice.classList.remove("selected");
+  // Ajoutez ici le code pour gérer la sélection du motif
+}
+
+updateProgressBar();
+checkButtonStatus();
