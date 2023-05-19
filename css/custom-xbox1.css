@@ -104,3 +104,12 @@
 .pattern-selection .category-choice div:hover {
   color: #3C3F3F;
 }
+
+.colors {
+  position: relative;
+  top: 4px;
+  height: 100%;
+  border-bottom: 2px solid #e0e0e0;
+  border-left: 2px solid #e0e0e0;
+  overflow: scroll;
+}
