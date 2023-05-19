@@ -13,12 +13,12 @@
   transform: translate(-50%, -50%);
 }
 
-.editor{
-  position:fixed;
-  width:30%;
-  height:85%;
-  right:0%;
-  bottom:0%;
+.editor {
+  position: fixed;
+  width: 30%;
+  height: 85%;
+  right: 0%;
+  bottom: 0%;
   background-color: #F9F9F8;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
@@ -50,8 +50,8 @@
   padding: 15px 15px 15px 0px;
   outline: none;
   background: none;
-  float:right;
-  width:auto;
+  float: right;
+  width: auto;
 }
 
 .categories-text {
@@ -68,4 +68,39 @@
 
 .categories-text span {
   margin-right: 10px;
+}
+
+.pattern-selection {
+  position: relative;
+  top: 4px;
+  height: 46px;
+  border-bottom: 2px solid #e0e0e0;
+  border-left: 2px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+}
+
+.pattern-selection {
+  display: flex;
+  align-items: center;
+}
+
+.pattern-selection .category-choice {
+  display: flex;
+  align-items: center;
+}
+
+.pattern-selection .category-choice div {
+  margin-left: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #e0e0e0;
+}
+
+.pattern-selection .category-choice .selected,
+.pattern-selection .category-choice div:hover {
+  color: #3C3F3F;
 }
