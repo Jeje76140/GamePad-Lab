@@ -3,153 +3,94 @@
 <head>
   <title>Chronomètre</title>
   <style>
-    body {
-      text-align: center;
-      font-family: Arial, sans-serif;
-    }
-    
-    #chrono {
-      font-size: 36px;
-      margin: 50px 0;
-    }
-    
-    .button {
-      padding: 10px 20px;
-      font-size: 18px;
-      margin: 5px;
-    }
-    
-    #startButton {
-      font-size: 24px;
-      padding: 20px 40px;
-    }
-    
-    #loginButton {
-      font-size: 18px;
-      padding: 10px 20px;
-    }
+   body {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+#chrono {
+  font-size: 72px;
+  margin: 50px 0;
+}
+
+.button {
+  font-size: 24px;
+  padding: 10px 20px;
+  margin: 10px;
+}
+
   </style>
 </head>
 <body>
-  <h1>Chronomètre</h1>
   <div id="chrono">00:00:00</div>
-  
-  <button id="startButton" class="button" disabled>START</button>
-  <button id="stopButton" class="button" disabled>STOP</button>
-  <button id="resetButton" class="button" disabled>RESET</button>
-  
-  <br><br>
-  
-  <button id="loginButton" class="button">Se connecter</button>
-  <input type="password" id="passwordInput" placeholder="Mot de passe" disabled>
-  
-  <script>
-    // Récupération des éléments du DOM
-    var chronoElement = document.getElementById('chrono');
-    var startButton = document.getElementById('startButton');
-    var stopButton = document.getElementById('stopButton');
-    var resetButton = document.getElementById('resetButton');
-    var loginButton = document.getElementById('loginButton');
-    var passwordInput = document.getElementById('passwordInput');
-    
-    // Variables pour le chrono
-    var startTime;
-    var elapsedTime = 0;
-    var timerInterval;
-    var isLoggedIn = false;
-    
-    // Événement au clic sur le bouton Se connecter
-    loginButton.addEventListener('click', function() {
-      var password = prompt('Entrez le mot de passe :');
-      if (password === 'votremotdepasse') { // Remplacez 'votremotdepasse' par le mot de passe souhaité
-        isLoggedIn = true;
-        enableChronoButtons();
-      } else {
-        alert('Mot de passe incorrect. Vous ne pouvez pas utiliser le chronomètre.');
-      }
-    });
-    
-    // Fonction pour activer les boutons du chronomètre
-    function enableChronoButtons() {
-      startButton.disabled = false;
-      stopButton.disabled = false;
-      resetButton.disabled = false;
-      loginButton.disabled = true;
-      passwordInput.disabled = true;
-    }
-    
-    // Fonction pour désactiver les boutons du chronomètre
-    function disableChronoButtons() {
-      startButton.disabled = true;
-      stopButton.disabled = true;
-      resetButton.disabled = true;
-      loginButton.disabled = false;
-      passwordInput.disabled = false;
-    }
-    
-    // Événement au clic sur le bouton START
-    startButton.addEventListener('click', function() {
-      if (isLoggedIn) {
-        startChrono();
-      } else {
-        alert('Veuillez vous connecter pour utiliser le chronomètre.');
-      }
-    });
-    
-    // Événement au clic sur le bouton STOP
-    stopButton.addEventListener('click', function() {
-      if (isLoggedIn) {
-        stopChrono();
-      } else {
-        alert('Veuillez vous connecter pour utiliser le chronomètre.');
-      }
-    });
-    
-    // Événement au clic sur le bouton RESET
-    resetButton.addEventListener('click', function() {
-      if (isLoggedIn) {
-        resetChrono();
-      } else {
-        alert('Veuillez vous connecter pour utiliser le chronomètre.');
-      }
-    });
-    
-    // Fonction pour démarrer le chrono
-    function startChrono() {
-      startTime = new Date().getTime() - elapsedTime;
-      timerInterval = setInterval(updateChrono, 1000);
-    }
-    
-    // Fonction pour arrêter le chrono
-    function stopChrono() {
-      clearInterval(timerInterval);
-    }
-    
-    // Fonction pour réinitialiser le chrono
-    function resetChrono() {
-      clearInterval(timerInterval);
-      elapsedTime = 0;
-      chronoElement.textContent = '00:00:00';
-    }
-    
-    // Fonction pour mettre à jour l'affichage du chrono
-    function updateChrono() {
-      var currentTime = new Date().getTime();
-      elapsedTime = currentTime - startTime;
-      chronoElement.textContent = formatTime(elapsedTime);
-    }
-    
-    // Fonction pour formater le temps au format HH:MM:SS
-    function formatTime(time) {
-      var date = new Date(time);
-      var hours = date.getUTCHours().toString().padStart(2, '0');
-      var minutes = date.getUTCMinutes().toString().padStart(2, '0');
-      var seconds = date.getUTCSeconds().toString().padStart(2, '0');
-      return hours + ':' + minutes + ':' + seconds;
-    }
-    
-    // Désactiver les boutons du chronomètre au chargement de la page
-    disableChronoButtons();
-  </script>
+  <button id="startButton" class="button">START</button>
+  <button id="stopButton" class="button">STOP</button>
+
+  <script>// Récupération des éléments du DOM
+var chronoElement = document.getElementById('chrono');
+var startButton = document.getElementById('startButton');
+var stopButton = document.getElementById('stopButton');
+
+// Variables pour le chrono
+var startTime = 0;
+var elapsedTime = 0;
+var timerInterval;
+
+// Fonction pour démarrer le chrono
+function startChrono() {
+  startTime = Date.now() - elapsedTime;
+  timerInterval = setInterval(updateChrono, 1000);
+}
+
+// Fonction pour arrêter le chrono
+function stopChrono() {
+  clearInterval(timerInterval);
+  elapsedTime = Date.now() - startTime;
+  saveElapsedTime();
+}
+
+// Fonction pour mettre à jour l'affichage du chrono
+function updateChrono() {
+  var currentTime = Date.now();
+  elapsedTime = currentTime - startTime;
+  chronoElement.textContent = formatTime(elapsedTime);
+}
+
+// Fonction pour formater le temps au format HH:MM:SS
+function formatTime(time) {
+  var date = new Date(time);
+  var hours = date.getUTCHours().toString().padStart(2, '0');
+  var minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  var seconds = date.getUTCSeconds().toString().padStart(2, '0');
+  return hours + ':' + minutes + ':' + seconds;
+}
+
+// Fonction pour sauvegarder le temps écoulé
+function saveElapsedTime() {
+  localStorage.setItem('elapsedTime', elapsedTime.toString());
+}
+
+// Fonction pour charger le temps écoulé précédent
+function loadElapsedTime() {
+  var savedElapsedTime = localStorage.getItem('elapsedTime');
+  if (savedElapsedTime) {
+    elapsedTime = parseInt(savedElapsedTime);
+    chronoElement.textContent = formatTime(elapsedTime);
+  }
+}
+
+// Événement au clic sur le bouton START
+startButton.addEventListener('click', function() {
+  startChrono();
+});
+
+// Événement au clic sur le bouton STOP
+stopButton.addEventListener('click', function() {
+  stopChrono();
+});
+
+// Charger le temps écoulé précédent lors de la prochaine connexion
+loadElapsedTime();
+</script>
 </body>
 </html>
