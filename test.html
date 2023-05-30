@@ -27,7 +27,7 @@
   <button id="stopButton" class="button">STOP</button>
 
   <script>
-    // Récupération des éléments du DOM
+  // Récupération des éléments du DOM
 var chronoElement = document.getElementById('chrono');
 var startButton = document.getElementById('startButton');
 var stopButton = document.getElementById('stopButton');
@@ -39,14 +39,22 @@ var timerInterval;
 
 // Fonction pour démarrer le chrono
 function startChrono() {
-  startTime = Date.now() - elapsedTime;
+  startTime = Date.now();
   timerInterval = setInterval(updateChrono, 1000);
 }
 
 // Fonction pour arrêter le chrono
 function stopChrono() {
   clearInterval(timerInterval);
-  elapsedTime = Date.now() - startTime;
+  elapsedTime += Date.now() - startTime;
+  saveElapsedTime();
+}
+
+// Fonction pour réinitialiser le chrono
+function resetChrono() {
+  clearInterval(timerInterval);
+  elapsedTime = 0;
+  chronoElement.textContent = formatTime(elapsedTime);
   saveElapsedTime();
 }
 
@@ -87,6 +95,11 @@ startButton.addEventListener('click', function() {
 // Événement au clic sur le bouton STOP
 stopButton.addEventListener('click', function() {
   stopChrono();
+});
+
+// Événement au clic sur le bouton RESET
+resetButton.addEventListener('click', function() {
+  resetChrono();
 });
 
 // Charger le temps écoulé précédent lors de la prochaine connexion
