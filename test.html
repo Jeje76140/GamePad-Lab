@@ -26,7 +26,8 @@
   <button id="startButton" class="button">START</button>
   <button id="stopButton" class="button">STOP</button>
 
-  <script>// Récupération des éléments du DOM
+  <script>
+    // Récupération des éléments du DOM
 var chronoElement = document.getElementById('chrono');
 var startButton = document.getElementById('startButton');
 var stopButton = document.getElementById('stopButton');
@@ -58,10 +59,9 @@ function updateChrono() {
 
 // Fonction pour formater le temps au format HH:MM:SS
 function formatTime(time) {
-  var date = new Date(time);
-  var hours = date.getUTCHours().toString().padStart(2, '0');
-  var minutes = date.getUTCMinutes().toString().padStart(2, '0');
-  var seconds = date.getUTCSeconds().toString().padStart(2, '0');
+  var hours = Math.floor(time / (1000 * 60 * 60)).toString().padStart(2, '0');
+  var minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+  var seconds = Math.floor((time % (1000 * 60)) / 1000).toString().padStart(2, '0');
   return hours + ':' + minutes + ':' + seconds;
 }
 
@@ -91,6 +91,7 @@ stopButton.addEventListener('click', function() {
 
 // Charger le temps écoulé précédent lors de la prochaine connexion
 loadElapsedTime();
+
 </script>
 </body>
 </html>
