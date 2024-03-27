@@ -1,110 +1,229 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Chronomètre</title>
-  <style>
-   body {
-  text-align: center;
-  font-family: Arial, sans-serif;
-}
-
-#chrono {
-  font-size: 72px;
-  margin: 50px 0;
-}
-
-.button {
-  font-size: 24px;
-  padding: 10px 20px;
-  margin: 10px;
-}
-
-  </style>
-</head>
-<body>
-  <div id="chrono">00:00:00</div>
-  <button id="startButton" class="button">START</button>
-  <button id="stopButton" class="button">STOP</button>
-
-  <script>
-  // Récupération des éléments du DOM
-var chronoElement = document.getElementById('chrono');
-var startButton = document.getElementById('startButton');
-var stopButton = document.getElementById('stopButton');
-
-// Variables pour le chrono
-var startTime = 0;
-var elapsedTime = 0;
-var timerInterval;
-
-// Fonction pour démarrer le chrono
-function startChrono() {
-  startTime = Date.now();
-  timerInterval = setInterval(updateChrono, 1000);
-}
-
-// Fonction pour arrêter le chrono
-function stopChrono() {
-  clearInterval(timerInterval);
-  elapsedTime += Date.now() - startTime;
-  saveElapsedTime();
-}
-
-// Fonction pour réinitialiser le chrono
-function resetChrono() {
-  clearInterval(timerInterval);
-  elapsedTime = 0;
-  chronoElement.textContent = formatTime(elapsedTime);
-  saveElapsedTime();
-}
-
-// Fonction pour mettre à jour l'affichage du chrono
-function updateChrono() {
-  var currentTime = Date.now();
-  elapsedTime = currentTime - startTime;
-  chronoElement.textContent = formatTime(elapsedTime);
-}
-
-// Fonction pour formater le temps au format HH:MM:SS
-function formatTime(time) {
-  var hours = Math.floor(time / (1000 * 60 * 60)).toString().padStart(2, '0');
-  var minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-  var seconds = Math.floor((time % (1000 * 60)) / 1000).toString().padStart(2, '0');
-  return hours + ':' + minutes + ':' + seconds;
-}
-
-// Fonction pour sauvegarder le temps écoulé
-function saveElapsedTime() {
-  localStorage.setItem('elapsedTime', elapsedTime.toString());
-}
-
-// Fonction pour charger le temps écoulé précédent
-function loadElapsedTime() {
-  var savedElapsedTime = localStorage.getItem('elapsedTime');
-  if (savedElapsedTime) {
-    elapsedTime = parseInt(savedElapsedTime);
-    chronoElement.textContent = formatTime(elapsedTime);
-  }
-}
-
-// Événement au clic sur le bouton START
-startButton.addEventListener('click', function() {
-  startChrono();
-});
-
-// Événement au clic sur le bouton STOP
-stopButton.addEventListener('click', function() {
-  stopChrono();
-});
-
-// Événement au clic sur le bouton RESET
-resetButton.addEventListener('click', function() {
-  resetChrono();
-});
-
-// Charger le temps écoulé précédent lors de la prochaine connexion
-loadElapsedTime();
-
-</script>
-</body>
+<body style="overflow: hidden; background: transparent !important;">
+    <div class="container" id="gamepads">
+        <div class="template">
+            
+            <div class="triggers">
+                <span class="trigger left" data-name="button-left-shoulder-bottom"></span>
+                <span class="trigger right" data-name="button-right-shoulder-bottom"></span>
+                <span class="trigger-button left" data-name="button-left-shoulder-bottom-digital"></span>
+                <span class="trigger-button right" data-name="button-right-shoulder-bottom-digital"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="bumpers">
+                <span class="bumper left" data-name="button-left-shoulder-top"></span>
+                <span class="bumper right" data-name="button-right-shoulder-top"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="touchpad" data-name="touch-pad"></div>
+            <div class="quadrant"></div>
+            <div class="meta" data-name="button-meta"></div>
+            <div class="arrows">
+                <span class="back" data-name="button-select"></span>
+                <span class="start" data-name="button-start"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="abxy">
+                <span class="button a" data-name="button-1"></span>
+                <span class="button b" data-name="button-2"></span>
+                <span class="button x" data-name="button-3"></span>
+                <span class="button y" data-name="button-4"></span>
+            </div>
+            <div class="sticks">
+                <span class="stick left" data-name="stick-1"></span>
+                <span class="stick right" data-name="stick-2"></span>
+            </div>
+            <div class="wheels">
+                <span class="wheel left" data-name="stick-1-wheel"></span>
+                <span class="wheel right" data-name="stick-2-wheel"></span>
+            </div>
+            <div class="dpad">
+                <span class="face up" data-name="button-dpad-top"></span>
+                <span class="face down" data-name="button-dpad-bottom"></span>
+                <span class="face left" data-name="button-dpad-left"></span>
+                <span class="face right" data-name="button-dpad-right"></span>
+            </div>
+            <div class="fstick" data-name="arcade-stick"></div>
+        </div>
+        <div class="controller disconnected active ds4 half edit" id="gamepad-0" style="transform-origin: 0px 0px;">
+            
+            <div class="triggers">
+                <span class="trigger left" data-name="button-left-shoulder-bottom"></span>
+                <span class="trigger right" data-name="button-right-shoulder-bottom"></span>
+                <span class="trigger-button left" data-name="button-left-shoulder-bottom-digital"></span>
+                <span class="trigger-button right" data-name="button-right-shoulder-bottom-digital"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="bumpers">
+                <span class="bumper left" data-name="button-left-shoulder-top"></span>
+                <span class="bumper right" data-name="button-right-shoulder-top"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="touchpad" data-name="touch-pad"></div>
+            <div class="quadrant"></div>
+            <div class="meta" data-name="button-meta"></div>
+            <div class="arrows">
+                <span class="back" data-name="button-select"></span>
+                <span class="start" data-name="button-start"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="abxy">
+                <span class="button a" data-name="button-1"></span>
+                <span class="button b" data-name="button-2"></span>
+                <span class="button x" data-name="button-3"></span>
+                <span class="button y" data-name="button-4"></span>
+            </div>
+            <div class="sticks">
+                <span class="stick left" data-name="stick-1"></span>
+                <span class="stick right" data-name="stick-2"></span>
+            </div>
+            <div class="wheels">
+                <span class="wheel left" data-name="stick-1-wheel"></span>
+                <span class="wheel right" data-name="stick-2-wheel"></span>
+            </div>
+            <div class="dpad">
+                <span class="face up" data-name="button-dpad-top"></span>
+                <span class="face down" data-name="button-dpad-bottom"></span>
+                <span class="face left" data-name="button-dpad-left"></span>
+                <span class="face right" data-name="button-dpad-right"></span>
+            </div>
+            <div class="fstick" data-name="arcade-stick"></div>
+        </div>
+        <div class="controller disconnected ds4 half edit" id="gamepad-1" style="transform-origin: 0px 0px;">
+            
+            <div class="triggers">
+                <span class="trigger left" data-name="button-left-shoulder-bottom"></span>
+                <span class="trigger right" data-name="button-right-shoulder-bottom"></span>
+                <span class="trigger-button left" data-name="button-left-shoulder-bottom-digital"></span>
+                <span class="trigger-button right" data-name="button-right-shoulder-bottom-digital"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="bumpers">
+                <span class="bumper left" data-name="button-left-shoulder-top"></span>
+                <span class="bumper right" data-name="button-right-shoulder-top"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="touchpad" data-name="touch-pad"></div>
+            <div class="quadrant"></div>
+            <div class="meta" data-name="button-meta"></div>
+            <div class="arrows">
+                <span class="back" data-name="button-select"></span>
+                <span class="start" data-name="button-start"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="abxy">
+                <span class="button a" data-name="button-1"></span>
+                <span class="button b" data-name="button-2"></span>
+                <span class="button x" data-name="button-3"></span>
+                <span class="button y" data-name="button-4"></span>
+            </div>
+            <div class="sticks">
+                <span class="stick left" data-name="stick-1"></span>
+                <span class="stick right" data-name="stick-2"></span>
+            </div>
+            <div class="wheels">
+                <span class="wheel left" data-name="stick-1-wheel"></span>
+                <span class="wheel right" data-name="stick-2-wheel"></span>
+            </div>
+            <div class="dpad">
+                <span class="face up" data-name="button-dpad-top"></span>
+                <span class="face down" data-name="button-dpad-bottom"></span>
+                <span class="face left" data-name="button-dpad-left"></span>
+                <span class="face right" data-name="button-dpad-right"></span>
+            </div>
+            <div class="fstick" data-name="arcade-stick"></div>
+        </div>
+        <div class="controller disconnected ds4 half edit" id="gamepad-2" style="transform-origin: 0px 0px;">
+            
+            <div class="triggers">
+                <span class="trigger left" data-name="button-left-shoulder-bottom"></span>
+                <span class="trigger right" data-name="button-right-shoulder-bottom"></span>
+                <span class="trigger-button left" data-name="button-left-shoulder-bottom-digital"></span>
+                <span class="trigger-button right" data-name="button-right-shoulder-bottom-digital"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="bumpers">
+                <span class="bumper left" data-name="button-left-shoulder-top"></span>
+                <span class="bumper right" data-name="button-right-shoulder-top"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="touchpad" data-name="touch-pad"></div>
+            <div class="quadrant"></div>
+            <div class="meta" data-name="button-meta"></div>
+            <div class="arrows">
+                <span class="back" data-name="button-select"></span>
+                <span class="start" data-name="button-start"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="abxy">
+                <span class="button a" data-name="button-1"></span>
+                <span class="button b" data-name="button-2"></span>
+                <span class="button x" data-name="button-3"></span>
+                <span class="button y" data-name="button-4"></span>
+            </div>
+            <div class="sticks">
+                <span class="stick left" data-name="stick-1"></span>
+                <span class="stick right" data-name="stick-2"></span>
+            </div>
+            <div class="wheels">
+                <span class="wheel left" data-name="stick-1-wheel"></span>
+                <span class="wheel right" data-name="stick-2-wheel"></span>
+            </div>
+            <div class="dpad">
+                <span class="face up" data-name="button-dpad-top"></span>
+                <span class="face down" data-name="button-dpad-bottom"></span>
+                <span class="face left" data-name="button-dpad-left"></span>
+                <span class="face right" data-name="button-dpad-right"></span>
+            </div>
+            <div class="fstick" data-name="arcade-stick"></div>
+        </div>
+        <div class="controller disconnected ds4 half edit" id="gamepad-3" style="transform-origin: 0px 0px;">
+            
+            <div class="triggers">
+                <span class="trigger left" data-name="button-left-shoulder-bottom"></span>
+                <span class="trigger right" data-name="button-right-shoulder-bottom"></span>
+                <span class="trigger-button left" data-name="button-left-shoulder-bottom-digital"></span>
+                <span class="trigger-button right" data-name="button-right-shoulder-bottom-digital"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="bumpers">
+                <span class="bumper left" data-name="button-left-shoulder-top"></span>
+                <span class="bumper right" data-name="button-right-shoulder-top"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="touchpad" data-name="touch-pad"></div>
+            <div class="quadrant"></div>
+            <div class="meta" data-name="button-meta"></div>
+            <div class="arrows">
+                <span class="back" data-name="button-select"></span>
+                <span class="start" data-name="button-start"></span>
+                <span class="clear"></span>
+            </div>
+            <div class="abxy">
+                <span class="button a" data-name="button-1"></span>
+                <span class="button b" data-name="button-2"></span>
+                <span class="button x" data-name="button-3"></span>
+                <span class="button y" data-name="button-4"></span>
+            </div>
+            <div class="sticks">
+                <span class="stick left" data-name="stick-1"></span>
+                <span class="stick right" data-name="stick-2"></span>
+            </div>
+            <div class="wheels">
+                <span class="wheel left" data-name="stick-1-wheel"></span>
+                <span class="wheel right" data-name="stick-2-wheel"></span>
+            </div>
+            <div class="dpad">
+                <span class="face up" data-name="button-dpad-top"></span>
+                <span class="face down" data-name="button-dpad-bottom"></span>
+                <span class="face left" data-name="button-dpad-left"></span>
+                <span class="face right" data-name="button-dpad-right"></span>
+            </div>
+            <div class="fstick" data-name="arcade-stick"></div>
+        </div>
+    </div>
+    <script type="text/javascript" src="main.js"></script>
+  <script type="text/javascript" src="gamepad.js"></script>
+    </body>
 </html>
