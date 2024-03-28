@@ -1,511 +1,1131 @@
 /**
- * Copyright 2012 Google Inc. All Rights Reserved.
+ * The main Gamepad class
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * @author mwichary@google.com (Marcin Wichary)
- * Modified by Christopher R.
+ * @class Gamepad
  */
-
-var gamepadSupport = {
-    // A number of typical buttons recognized by Gamepad API and mapped to
-    // standard controls. Any extraneous buttons will have larger indexes.
-    TYPICAL_BUTTON_COUNT: 18,
-
-    // A number of typical axes recognized by Gamepad API and mapped to
-    // standard controls. Any extraneous buttons will have larger indexes.
-    TYPICAL_AXIS_COUNT: 4,
-
-    // Whether we�re requestAnimationFrameing like it�s 1999.
-    ticking: false,
-
-    // The canonical list of attached gamepads, without �holes� (always
-    // starting at [0]) and unified between Firefox and Chrome.
-    gamepads: [],
-
-    // Remembers the connected gamepads at the last check; used in Chrome
-    // to figure out when gamepads get connected or disconnected, since no
-    // events are fired.
-    prevRawGamepadTypes: [],
-
-    // Previous timestamps for gamepad state; used in Chrome to not bother with
-    // analyzing the polled data if nothing changed (timestamp is the same
-    // as last time).
-    prevTimestamps: [],
-
+class Gamepad {
     /**
-     * Initialize support for Gamepad API.
+     * Creates an instance of Gamepad.
      */
-    init: function () {
-        // As of writing, it seems impossible to detect Gamepad API support
-        // in Firefox, hence we need to hardcode it in the third clause.
-        // (The preceding two clauses are for Chrome.)
-        if (!!navigator.getGamepads) {
-            var gamepadSupportAvailable = !!navigator.getGamepads;
-        } else {
-            var gamepadSupportAvailable = !!navigator.webkitGetGamepads || !!navigator.webkitGamepads ||
-                (navigator.userAgent.indexOf('Firefox/') != -1);
+    constructor() {
+        // cached DOM references
+        this.$body = $("body");
+        this.$instructions = $("#instructions");
+        this.$placeholder = $("#placeholder");
+        this.$gamepad = $("#gamepad");
+        this.$overlay = $("#overlay");
+        this.$skinSelect = $("select[name=skin]");
+        this.$backgroundSelect = $("select[name=background]");
+        this.$colorOverlay = this.$overlay.find("#color");
+        this.$colorSelect = this.$colorOverlay.find("select[name=color]");
+        this.$triggersOverlay = this.$overlay.find("#triggers");
+        this.$triggersSelect = this.$triggersOverlay.find(
+            "select[name=triggers]"
+        );
+        this.$helpPopout = $("#help-popout");
+        this.$gamepadList = $("#gamepad-list");
+
+        this.backgroundStyle = [
+            "transparent",
+            "checkered",
+            "dimgrey",
+            "black",
+            "white",
+            "lime",
+            "magenta",
+        ];
+        this.textColors = [
+            "black",
+            "black",
+            "black",
+            "white",
+            "black",
+            "black",
+            "black",
+        ];
+
+        // ensure the GamePad API is available on this browser
+        this.assertGamepadAPI();
+
+        this.initOverlaySelectors();
+
+        // gamepad collection default values
+        this.gamepads = {};
+        this.identifiers = {
+            // See: https://html5gamepad.com/codes
+            debug: {
+                id: /debug/,
+                name: "Debug",
+            },
+            ds4: {
+                id: /054c|54c|09cc|046d|0810|2563/, // 054c = Sony vendor code, 046d,0810,2563 = PS-like controllers vendor codes
+                name: "DualShock 4",
+                colors: ["black", "white", "red", "blue"],
+                triggers: true,
+            },
+            // gamecube: {
+            //     id: /0079/, // 0079 = Nintendo GameCube vendor code
+            //     name: "GameCube Controller",
+            //     colors: ["black", "purple"],
+            // },
+            // "joy-con": {
+            //     id: /200e/, // 0079 = Joy-Con specific product code
+            //     name: "Joy-Con (L+R) Controllers",
+            //     colors: ["blue-red", "grey-grey"],
+            // },
+            // stadia: {
+            //     id: /18d1/, // 18d1 = Google vendor code
+            //     name: "Stadia Controller",
+            //     colors: ["black"],
+            // },
+            // "switch-pro": {
+            //     id: /057e|20d6/, // 057e = Nintendo Switch vendor code, 20d6 = Switch Pro-like vendor code
+            //     name: "Switch Pro Controller",
+            //     colors: ["black"],
+            // },
+            "xbox-one": {
+                id: /045e|xinput|XInput/, // 045e = Microsoft vendor code, xinput = standard Windows controller
+                name: "Xbox One",
+                colors: ["black", "white"],
+                triggers: true,
+            },
+        };
+
+        // gamepad help default values
+        this.instructionsTimeout = null;
+        this.instructionsDelay = 5000;
+        this.placeholderTimeout = null;
+        this.placeholderDelay = 12000;
+        this.overlayTimeout = null;
+        this.overlayDelay = 5000;
+
+        // active gamepad default values
+        this.scanDelay = 200;
+        this.debug = false;
+        this.index = null;
+        this.disconnectedIndex = null;
+        this.type = null;
+        this.identifier = null;
+        this.lastTimestamp = null;
+        this.backgroundStyleIndex = 0;
+        this.colorIndex = null;
+        this.colorName = null;
+        this.triggersMeter = false;
+        this.zoomMode = "auto";
+        this.zoomLevel = 1;
+        this.mapping = {
+            buttons: [],
+            axes: [],
+        };
+
+        // // read hash
+        // this.hash = this.readHash();
+
+        // listen for gamepad related events
+        this.haveEvents = "GamepadEvent" in window;
+        if (this.haveEvents) {
+            window.addEventListener(
+                "gamepadconnected",
+                this.onGamepadConnect.bind(this)
+            );
+            window.addEventListener(
+                "gamepaddisconnected",
+                this.onGamepadDisconnect.bind(this)
+            );
         }
 
-        if (!gamepadSupportAvailable) {
-            // It doesn�t seem Gamepad API is available � show a message telling
-            // the visitor about it.
-            tester.showNotSupported();
-        } else {
-            // Firefox supports the connect/disconnect event, so we attach event
-            // handlers to those.
-            window.addEventListener('gamepadconnected',
-                gamepadSupport.onGamepadConnect, false);
-            window.addEventListener('gamepaddisconnected',
-                gamepadSupport.onGamepadDisconnect, false);
+        // listen for mouse move events
+        window.addEventListener("mousemove", this.onMouseMove.bind(this));
+        // listen for keyboard events
+        window.addEventListener("keydown", this.onKeyDown.bind(this));
+        // listen for keyboard events
+        window.addEventListener("resize", this.onResize.bind(this));
 
-            // Since Chrome only supports polling, we initiate polling loop straight
-            // away. For Firefox, we will only do it if we get a connect event.
-            if (!!navigator.getGamepads || !!navigator.webkitGamepads || !!navigator.webkitGetGamepads) {
-                gamepadSupport.startPolling();
+        // bind a gamepads scan
+        window.setInterval(this.scan.bind(this), this.scanDelay);
+
+        // change the type if specified
+        const skin = this.getUrlParam("type");
+        if (skin) {
+            this.changeSkin(skin);
+        }
+
+        // change the background if specified
+        const background = this.getUrlParam("background");
+        if (background) {
+            let backgroundStyleIndex;
+            for (let i = 0; i < this.backgroundStyle.length; i++) {
+                if (background === this.backgroundStyle[i]) {
+                    backgroundStyleIndex = i;
+                    break;
+                }
             }
+
+            if (backgroundStyleIndex)
+                this.changeBackgroundStyle(backgroundStyleIndex);
         }
-    },
+
+        // by default, enqueue a delayed display of the placeholder animation
+        this.displayPlaceholder();
+    }
 
     /**
-     * React to the gamepad being connected. Today, this will only be executed
-     * on Firefox.
+     * Ensures the availability of the Gamepad API in the current navigator
      */
-    onGamepadConnect: function (event) {
-        // Add the new gamepad on the list of gamepads to look after.
-        gamepadSupport.gamepads.push(event.gamepad);
+    assertGamepadAPI() {
+        const getGamepadsFn = navigator.getGamepads
+            ? () => navigator.getGamepads()
+            : navigator.webkitGetGamepads
+            ? () => navigator.webkitGetGamepads()
+            : null;
+        if (!getGamepadsFn) {
+            this.$body.addClass("unsupported");
+            throw new Error("Unsupported gamepad API");
+        }
+        this.getNavigatorGamepads = getGamepadsFn;
+    }
 
-        // Ask the tester to update the screen to show more gamepads.
-        tester.updateGamepads(gamepadSupport.gamepads);
+    /**
+     * Initialises the overlay selectors
+     */
+    initOverlaySelectors() {
+        this.$skinSelect.on("change", () =>
+            this.changeSkin(this.$skinSelect.val())
+        );
+        this.$backgroundSelect.on("change", () =>
+            this.changeBackgroundStyle(this.$backgroundSelect.val())
+        );
+        this.$colorSelect.on("change", () =>
+            this.changeGamepadColor(this.$colorSelect.val())
+        );
+        this.$triggersSelect.on("change", () =>
+            this.toggleTriggersMeter(this.$triggersSelect.val() === "meter")
+        );
+    }
 
-        // Start the polling loop to monitor button changes.
-        gamepadSupport.startPolling();
-    },
+    /**
+     * Displays the instructions
+     */
+    displayInstructions() {
+        // do not display help if we have an active gamepad
+        if (null !== this.index) return;
 
-    // This will only be executed on Firefox.
-    onGamepadDisconnect: function (event) {
-        // Remove the gamepad from the list of gamepads to monitor.
-        for (var i in gamepadSupport.gamepads) {
-            if (gamepadSupport.gamepads[i].index == event.gamepad.index) {
-                gamepadSupport.gamepads.splice(i, 1);
+        // cancel the queued display of the instructions animation, if any
+        window.clearTimeout(this.instructionsTimeout);
+        // show the instructions
+        this.$instructions.show();
+
+        // enqueue a delayed display of the instructions animation
+        this.hideInstructions();
+    }
+
+    /**
+     * Hides the instructions animation
+     *
+     * @param {boolean} [hideNow=false]
+     */
+    hideInstructions(hideNow = false) {
+        // hide the message right away if needed
+        if (hideNow) {
+            this.$instructions.hide();
+        }
+
+        // hide instructions animation if no gamepad is active after X ms
+        this.instructionsTimeout = window.setTimeout(() => {
+            this.$instructions.fadeOut();
+        }, this.instructionsDelay);
+    }
+
+    /**
+     * Displays the placeholder animation on screen
+     */
+    displayPlaceholder() {
+        // do not display help if we have an active gamepad
+        if (null !== this.index) return;
+
+        // cancel the queued display of the placeholder animation, if any
+        window.clearTimeout(this.placeholderTimeout);
+        // show the placeholder
+        this.$placeholder.show();
+
+        // enqueue a delayed display of the placeholder animation
+        this.hidePlaceholder();
+    }
+
+    /**
+     * Hides the placeholder animation
+     *
+     * @param {boolean} [hideNow=false]
+     */
+    hidePlaceholder(hideNow = false) {
+        // hide the animation right away if needed
+        if (hideNow) {
+            this.$placeholder.hide();
+        }
+
+        // hide placeholder animation if no gamepad is active after X ms
+        this.placeholderTimeout = window.setTimeout(() => {
+            this.$placeholder.fadeOut();
+        }, this.placeholderDelay);
+    }
+
+    /**
+     * Displays the overlay animation on screen
+     */
+    displayOverlay() {
+        // cancel the queued display of the overlay animation, if any
+        window.clearTimeout(this.overlayTimeout);
+        // show the overlay
+        this.$overlay.show();
+
+        // enqueue a delayed display of the overlay animation
+        this.hideOverlay();
+    }
+
+    /**
+     * Hides the overlay animation
+     *
+     * @param {boolean} [hideNow=false]
+     */
+    hideOverlay(hideNow = false) {
+        // hide the message right away if needed
+        if (hideNow) {
+            this.$overlay.hide();
+        }
+
+        // hide overlay animation if no gamepad is active after X ms
+        this.overlayTimeout = window.setTimeout(() => {
+            this.$overlay.fadeOut();
+        }, this.overlayDelay);
+    }
+
+    /**
+     * Update colors following the active/inactive gamepad
+     */
+    updateColors() {
+        if (!this.type) {
+            this.$colorOverlay.hide();
+            return;
+        }
+
+        const colors = this.identifiers[this.type].colors;
+        if (!colors) {
+            this.$colorOverlay.hide();
+            return;
+        }
+
+        const colorOptions = colors.map(
+            (color) => `<option value="${color}">${color}</option>`
+        );
+        this.$colorSelect.html(colorOptions);
+        this.$colorOverlay.fadeIn();
+    }
+
+    /**
+     * Update triggers following the active/inactive gamepad
+     */
+    updateTriggers() {
+        if (!this.type) {
+            this.$triggersOverlay.hide();
+            return;
+        }
+
+        const triggers = this.identifiers[this.type].triggers;
+        if (!triggers) {
+            this.$triggersOverlay.hide();
+            return;
+        }
+
+        this.$triggersOverlay.fadeIn();
+    }
+
+    /**
+     * Handles the gamepad connection event
+     *
+     * @param {GamepadEvent} e
+     */
+    onGamepadConnect(e) {
+        // refresh gamepad list on help, if displayed
+        if (this.helpVisible) this.buildHelpGamepadList();
+    }
+
+    /**
+     * Handles the gamepad disconnection event
+     *
+     * @param {GamepadEvent} e
+     */
+    onGamepadDisconnect(e) {
+        if (e.gamepad.index === this.index) {
+            // display a disconnection indicator
+            this.$gamepad.addClass("disconnected");
+            this.disconnectedIndex = e.gamepad.index;
+
+            // refresh gamepad list on help, if displayed
+            if (this.helpVisible) this.buildHelpGamepadList();
+        }
+    }
+
+    /**
+     * Handles the mouse "mousemove" event
+     *
+     * @param {MouseEvent} e
+     */
+    onMouseMove() {
+        this.displayInstructions();
+        this.displayPlaceholder();
+        this.displayOverlay();
+    }
+
+    /**
+     * Handles the keyboard "keydown" event
+     *
+     * @param {KeyboardEvent} e
+     */
+    onKeyDown(e) {
+        switch (e.code) {
+            case "Delete":
+            case "Escape":
+                this.clear();
+                this.displayPlaceholder();
                 break;
-            }
+            case "KeyB":
+                this.changeBackgroundStyle();
+                break;
+            case "KeyC":
+                this.changeGamepadColor();
+                break;
+            case "KeyD":
+                this.toggleDebug();
+                break;
+            case "KeyG":
+                this.toggleGamepadType();
+                break;
+            case "KeyH":
+                this.toggleHelp();
+                break;
+            case "KeyT":
+                this.toggleTriggersMeter();
+                break;
+            case "NumpadAdd":
+            case "Equal":
+                this.changeZoom("+");
+                break;
+            case "NumpadSubtract":
+            case "Minus":
+                this.changeZoom("-");
+                break;
+            case "Numpad5":
+            case "Digit5":
+                this.changeZoom("auto");
+                break;
+            case "Numpad0":
+            case "Digit0":
+                this.changeZoom(0);
+                break;
         }
-
-        // If no gamepads are left, stop the polling loop.
-        if (gamepadSupport.gamepads.length == 0) {
-            gamepadSupport.stopPolling();
-        }
-
-        // Ask the tester to update the screen to remove the gamepad.
-        tester.updateGamepads(gamepadSupport.gamepads);
-    },
+    }
 
     /**
-     * Starts a polling loop to check for gamepad state.
+     * Handles the keyboard "keydown" event
+     *
+     * @param {WindowEvent} e
      */
-    startPolling: function () {
-        // Don�t accidentally start a second loop, man.
-        if (!gamepadSupport.ticking) {
-            gamepadSupport.ticking = true;
-            gamepadSupport.tick();
-        }
-    },
+    onResize(e) {
+        if (this.zoomMode === "auto") this.changeZoom("auto");
+    }
 
     /**
-     * Stops a polling loop by setting a flag which will prevent the next
-     * requestAnimationFrame() from being scheduled.
+     * Reloads gamepads data
      */
-    stopPolling: function () {
-        gamepadSupport.ticking = false;
-    },
+    pollGamepads() {
+        // get fresh information from DOM about gamepads
+        const gamepads = this.getNavigatorGamepads();
+        if (gamepads !== this.gamepads) this.gamepads = gamepads;
+    }
 
     /**
-     * A function called with each requestAnimationFrame(). Polls the gamepad
-     * status and schedules another poll.
+     * Builds the help gamepad list
      */
-    tick: function () {
-        gamepadSupport.pollStatus();
-        gamepadSupport.scheduleNextTick();
-    },
+    buildHelpGamepadList() {
+        // refresh gamepads information
+        this.pollGamepads();
 
-    scheduleNextTick: function () {
-        // Only schedule the next frame if we haven�t decided to stop via
-        // stopPolling() before.
-        if (gamepadSupport.ticking) {
-            if (window.requestAnimationFrame) {
-                window.requestAnimationFrame(gamepadSupport.tick);
-            } else if (window.mozRequestAnimationFrame) {
-                window.mozRequestAnimationFrame(gamepadSupport.tick);
-            } else if (window.webkitRequestAnimationFrame) {
-                window.webkitRequestAnimationFrame(gamepadSupport.tick);
-            }
-            // Note lack of setTimeout since all the browsers that support
-            // Gamepad API are already supporting requestAnimationFrame().
-        }
-    },
-
-    /**
-     * Checks for the gamepad status. Monitors the necessary data and notices
-     * the differences from previous state (buttons for Chrome/Firefox,
-     * new connects/disconnects for Chrome). If differences are noticed, asks
-     * to update the display accordingly. Should run as close to 60 frames per
-     * second as possible.
-     */
-    pollStatus: function () {
-        // Poll to see if gamepads are connected or disconnected. Necessary
-        // only on Chrome.
-        gamepadSupport.pollGamepads();
-
-        for (var i in gamepadSupport.gamepads) {
-            var gamepad = gamepadSupport.gamepads[i];
-
-            // Don�t do anything if the current timestamp is the same as previous
-            // one, which means that the state of the gamepad hasn�t changed.
-            // This is only supported by Chrome right now, so the first check
-            // makes sure we�re not doing anything if the timestamps are empty
-            // or undefined.
-            if (gamepad.timestamp &&
-                (gamepad.timestamp == gamepadSupport.prevTimestamps[i])) {
+        const $tbody = [];
+        for (let key = 0; key < this.gamepads.length; key++) {
+            const gamepad = this.gamepads[key];
+            if (!gamepad) {
                 continue;
             }
-            gamepadSupport.prevTimestamps[i] = gamepad.timestamp;
-            gamepadSupport.updateDisplay(i);
+
+            $tbody.push(
+                `<tr><td>${gamepad.index}</td><td>${gamepad.id}</td></tr>"`
+            );
         }
-    },
-
-    // This function is called only on Chrome, which does not yet support
-    // connection/disconnection events, but requires you to monitor
-    // an array for changes.
-    pollGamepads: function () {
-
-        // Get the array of gamepads � the first method (function call)
-        // is the most modern one, the second is there for compatibility with
-        // slightly older versions of Chrome, but it shouldn�t be necessary
-        // for long.
-        var rawGamepads =
-            (navigator.getGamepads && navigator.getGamepads()) ||
-            (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) ||
-            navigator.webkitGamepads;
-
-        if (rawGamepads) {
-            // We don�t want to use rawGamepads coming straight from the browser,
-            // since it can have �holes� (e.g. if you plug two gamepads, and then
-            // unplug the first one, the remaining one will be at index [1]).
-            gamepadSupport.gamepads = [];
-            gamepadSupport.gamepadsRaw = [];
-
-            //var rawFixedGamepads = {};
-            //for(var i = 0, ii = 0; i <= rawGamepads.length; i++){
-            //    if (typeof rawGamepads[i] == "object" && rawGamepads[i].id.indexOf("(Vendor: b58e Product: 9e84)") !== -1) continue;
-            //    rawFixedGamepads[ii] = rawGamepads[i];
-            //    rawFixedGamepads.length = i;
-            //    ii++;
-            //}
-            //console.log(rawFixedGamepads);
-            //rawGamepads = rawFixedGamepads;
-
-
-            // We only refresh the display when we detect some gamepads are new
-            // or removed; we do it by comparing raw gamepad table entries to
-            // �undefined.�
-            var gamepadsChanged = false;
-
-            for (var i = 0; i < rawGamepads.length; i++) {
-                if (typeof rawGamepads[i] != gamepadSupport.prevRawGamepadTypes[i]) {
-                    gamepadsChanged = true;
-                    gamepadSupport.prevRawGamepadTypes[i] = typeof rawGamepads[i];
-                }
-                //console.log(rawGamepads[i].id);
-                //if (rawGamepads[i] == undefined || rawGamepads[i].id.indexOf("(Vendor: b58e Product: 9e84)") !== -1) continue;
-                if (rawGamepads[i] && controllerRebinds != "" && typeof controllerRebinds.mapping != 'undefined' && controllerRebinds.mapping.length > 0) {
-                    var remapObj = $.extend(true, {}, rawGamepads[i]);
-                    for (var b = 0; b < remapObj.buttons.length; b++) {
-                        remapObj.buttons[b] = $.extend({}, rawGamepads[i].buttons[b]);
-                    }
-                    for (var m = 0; m < controllerRebinds.mapping.length; m++) {
-                        var bindmap = controllerRebinds.mapping[m];
-                        var noMap = bindmap.disabled;
-                        var tType = bindmap.targetType;
-                        var tMap = bindmap.target;
-                        if (tType == "buttons" && typeof remapObj[tType][tMap] == "undefined") {
-                            remapObj[tType][tMap] = {};
-                        }
-
-                        function stickToButton(stickObj) {
-                            //contrary to the function's name, it turns buttons into buttons too
-                            if (stickObj.choiceType == "buttons") {
-                                return rawGamepads[i].buttons[stickObj.choice].value;
-                            } else {
-                                var axisVal = rawGamepads[i].axes[stickObj.choice];
-                                switch (stickObj.choiceOperand) {
-                                    case "+":
-                                        return (axisVal > 0) ? axisVal : 0;
-                                        break;
-                                    case "-":
-                                        return (axisVal < 0) ? Math.abs(axisVal) : 0;
-                                        break;
-                                    default:
-                                        return 0;
-                                }
-                            }
-                        }
-
-                        function makeAxis(positiveAxis, negativeAxis) {
-                            return positiveAxis - negativeAxis;
-                        }
-
-                        /***
-                         * This should function as a somewhat wrapper function to allow an easier way of producing
-                         * values on remapping. Should the bindmap have no data for axis configuration, the mapping is
-                         * then sent off to the stickToButton function which then produces the appropriate values.
-                         *
-                         * This tends to get slightly trickier when I have to actually account for when an axis is
-                         * broken as I first have to manipulate the raw data, then return proper values, either as a
-                         * button or an axis.
-                         * */
-                        function bindWrapper(stickObj) {
-                            if (tType == "dpad") {
-                                dpadPOV(stickObj);
-                                return;
-                            }
-                            if (typeof stickObj.axesConfig == "undefined") {
-                                setMapping(stickObj, {});
-                                return;
-                            }
-                            fixAxes(stickObj);
-                        }
-
-                        function choiceValue(mapObj) {
-                            var value;
-                            switch (mapObj.choiceType) {
-                                case "":
-                                    return choiceValue(mapObj.positive);
-                                    break;
-                                case "axes":
-                                    value = rawGamepads[i].axes[mapObj.choice];
-                                    break;
-                                case "buttons":
-                                    value = rawGamepads[i].buttons[mapObj.choice].value;
-                                    break;
-                                default:
-                                    value = 0;
-                            }
-                            return value;
-                        }
-
-                        //To fix axes, we assume all fixes are trigger type and use that to create a stick when needed
-                        function fixAxes(stickObj) {
-                            var startValue = +stickObj.axesConfig.lowValue;
-                            var endValue = +stickObj.axesConfig.highValue;
-
-                            var isFlipped = (endValue < startValue);
-
-                            if (isFlipped) {
-                                var temp = startValue;
-                                startValue = endValue;
-                                endValue = temp;
-                            }
-
-                            var zeroOffset = startValue * -1;
-                            var axisVal = choiceValue(stickObj);
-
-                            //By adding the offset to the current value and end value, we can normalize the input
-                            var newValue = (axisVal + zeroOffset) / (endValue + zeroOffset);
-
-                            //In the event the start and end are swapped, we account for it but subtracting the value from 1
-                            newValue = (isFlipped) ? (1 - newValue) : newValue;
-
-                            switch (stickObj.axesConfig.type) {
-                                case "trigger":
-                                    break;
-                                case "stick":
-                                    newValue = (-1 + (newValue * 2));
-                                    break;
-                                default:
-                                    setMapping(stickObj, {});
-                                    return;
-                            }
-                            setMapping(stickObj, newValue);
-                        }
-
-                        function dpadPOV(stickObj) {
-                            var up, down, left, right, upright, downright, downleft, upleft, value;
-                            setMapping({targetType: "buttons", target: 12}, 0);
-                            setMapping({targetType: "buttons", target: 13}, 0);
-                            setMapping({targetType: "buttons", target: 14}, 0);
-                            setMapping({targetType: "buttons", target: 15}, 0);
-                            if (stickObj.disabled) return;
-                            up = stickObj.positions.up;
-                            down = stickObj.positions.down;
-                            left = stickObj.positions.left;
-                            right = stickObj.positions.right;
-                            upright = stickObj.positions.upright;
-                            downright = stickObj.positions.downright;
-                            downleft = stickObj.positions.downleft;
-                            upleft = stickObj.positions.upleft;
-                            value = choiceValue(stickObj);
-
-                            function isWithinRange(val, target) {
-                                if (val >= target - 0.001 && val <= target + 0.001)
-                                    return true
-                                else
-                                    return false
-
-                            }
-
-                            if (isWithinRange(value,up)) {
-                                setMapping({targetType: "buttons", target: 12}, 1);
-                            } else if (isWithinRange(value,down)) {
-                                setMapping({targetType: "buttons", target: 13}, 1);
-                            } else if (isWithinRange(value,left)) {
-                                setMapping({targetType: "buttons", target: 14}, 1);
-                            } else if (isWithinRange(value,right)) {
-                                setMapping({targetType: "buttons", target: 15}, 1);
-                            } else if (isWithinRange(value,upright)) {
-                                setMapping({targetType: "buttons", target: 12}, 1);
-                                setMapping({targetType: "buttons", target: 15}, 1);
-                            } else if (isWithinRange(value,downright)) {
-                                setMapping({targetType: "buttons", target: 15}, 1);
-                                setMapping({targetType: "buttons", target: 13}, 1);
-                            } else if (isWithinRange(value,downleft)) {
-                                setMapping({targetType: "buttons", target: 13}, 1);
-                                setMapping({targetType: "buttons", target: 14}, 1);
-                            } else if (isWithinRange(value,upleft)) {
-                                setMapping({targetType: "buttons", target: 14}, 1);
-                                setMapping({targetType: "buttons", target: 12}, 1);
-                            }
-                        }
-
-                        /***
-                         * This is to easily set the remapped item properly, whether it's a stick or axis as per defined
-                         * by the bindmap.
-                         * */
-                        function setMapping(stickObj, setValue) {
-                            switch (typeof setValue) {
-                                case "number":
-                                case "Number":
-                                    if (stickObj.targetType == "axes") {
-                                        remapObj[stickObj.targetType][stickObj.target] = setValue;
-                                    } else {
-                                        remapObj[stickObj.targetType][stickObj.target].value = setValue;
-                                    }
-                                    break;
-                                case "object":
-                                case "Object":
-                                    if (stickObj.targetType == "axes") {
-                                        remapObj[stickObj.targetType][stickObj.target] = makeAxis(stickToButton(stickObj.positive), stickToButton(stickObj.negative));
-                                    } else {
-                                        remapObj[stickObj.targetType][stickObj.target].value = stickToButton(stickObj);
-                                    }
-                                    break;
-                                default:
-                            }
-                        }
-
-                        try {
-                            if (noMap && tType != "dpad") {
-                                setMapping(bindmap, 0);
-                            } else {
-                                bindWrapper(bindmap);
-                            }
-                        } catch (e) {
-                            //console.log("ERROR IN MAPPING: ", e);
-                        }
-                    }
-                    gamepadSupport.gamepads.push(remapObj);
-                    gamepadSupport.gamepadsRaw.push(rawGamepads[i]);
-                } else if (rawGamepads[i]) {
-                    gamepadSupport.gamepads.push(rawGamepads[i]);
-                    gamepadSupport.gamepadsRaw.push(rawGamepads[i]);
-                }
-            }
-
-            // Ask the tester to refresh the visual representations of gamepads
-            // on the screen.
-            if (gamepadsChanged) {
-                tester.updateGamepads(gamepadSupport.gamepads);
-            }
-        }
-    },
-
-    // Call the tester with new state and ask it to update the visual
-    // representation of a given gamepad.
-    updateDisplay: function (gamepadId) {
-        if (pnumber == "") {
-            var gamepadRaw = gamepadSupport.gamepadsRaw[gamepadId];
-            for (var b in gamepadRaw.buttons) {
-                tester.updateRawButton(gamepadRaw.buttons[b], gamepadId, b);
-            }
-            for (var a in gamepadRaw.axes) {
-                tester.updateRawAxis(gamepadRaw.axes[a], gamepadId, a);
-            }
+        if ($tbody.length === 0) {
+            $tbody.push('<tr><td colspan="2">No gamepad detected.</td></tr>');
         }
 
-
-        var gamepad = gamepadSupport.gamepads[gamepadId];
-
-        // Update all the buttons (and their corresponding labels) on screen.
-        tester.queueButton(gamepad.buttons[0], gamepadId, 'button-1');
-        tester.queueButton(gamepad.buttons[1], gamepadId, 'button-2');
-        tester.queueButton(gamepad.buttons[2], gamepadId, 'button-3');
-        tester.queueButton(gamepad.buttons[3], gamepadId, 'button-4');
-
-        tester.queueButton(gamepad.buttons[4], gamepadId, 'button-left-shoulder-top');
-        tester.queueTrigger(gamepad.buttons[6], gamepadId, 'button-left-shoulder-bottom');
-        tester.queueTriggerDigital(gamepad.buttons[6], gamepadId, 'button-left-shoulder-bottom-digital');
-        tester.queueButton(gamepad.buttons[5], gamepadId, 'button-right-shoulder-top');
-        tester.queueTrigger(gamepad.buttons[7], gamepadId, 'button-right-shoulder-bottom');
-        tester.queueTriggerDigital(gamepad.buttons[7], gamepadId, 'button-right-shoulder-bottom-digital');
-
-        tester.queueButton(gamepad.buttons[8], gamepadId, 'button-select');
-        tester.queueButton(gamepad.buttons[9], gamepadId, 'button-start');
-
-        tester.queueButton(gamepad.buttons[10], gamepadId, 'stick-1');
-        tester.queueButton(gamepad.buttons[11], gamepadId, 'stick-2');
-
-        tester.queueButton(gamepad.buttons[12], gamepadId, 'button-dpad-top');
-        tester.queueButton(gamepad.buttons[13], gamepadId, 'button-dpad-bottom');
-        tester.queueButton(gamepad.buttons[14], gamepadId, 'button-dpad-left');
-        tester.queueButton(gamepad.buttons[15], gamepadId, 'button-dpad-right');
-        tester.queueButton(gamepad.buttons[16], gamepadId, 'button-meta');
-        tester.queueButton(gamepad.buttons[17], gamepadId, 'touch-pad');
-        tester.queueStick(gamepad.buttons[12], 'up', gamepadId, 'arcade-stick');
-        tester.queueStick(gamepad.buttons[13], 'down', gamepadId, 'arcade-stick');
-        tester.queueStick(gamepad.buttons[14], 'left', gamepadId, 'arcade-stick');
-        tester.queueStick(gamepad.buttons[15], 'right', gamepadId, 'arcade-stick');
-
-        // Update all the analogue sticks.
-        tester.queueAxis(gamepad.axes[0], gamepad.axes[1], gamepadId, 'stick-1');
-        tester.queueAxis(gamepad.axes[2], gamepad.axes[3], gamepadId, 'stick-2');
-
-        // Update extraneous buttons.
-        var extraButtonId = gamepadSupport.TYPICAL_BUTTON_COUNT;
-        while (typeof gamepad.buttons[extraButtonId] != 'undefined') {
-            //tester.queueButton(gamepad.buttons[extraButtonId], gamepadId,
-            //    'extra-button-' + extraButtonId);
-
-            extraButtonId++;
-        }
-
-        // Update extraneous axes.
-        var extraAxisId = gamepadSupport.TYPICAL_AXIS_COUNT;
-        while (typeof gamepad.axes[extraAxisId] != 'undefined') {
-            //tester.queueAxis(gamepad.axes[extraAxisId], gamepadId,
-            //    'extra-axis-' + extraAxisId);
-
-            extraAxisId++;
-        }
-
+        this.$gamepadList.html($tbody.join(""));
     }
-};
+
+    /**
+     * Return the connected gamepad
+     */
+    getActive() {
+        return this.gamepads[this.index];
+    }
+
+    /**
+     * Return the gamepad type for the connected gamepad
+     *
+     * @param {object} gamepad
+     */
+    getType(gamepad) {
+        const type = this.getUrlParam("type");
+
+        // if the debug option is active, use the associated template
+        if (type === "debug") this.debug = true;
+        if (this.debug) {
+            return "debug";
+        }
+
+        // if the gamepad type is set through params, apply it
+        if (type) {
+            return type;
+        }
+
+        // else, determine the template to use from the gamepad identifier and update settings
+        for (let gamepadType in this.identifiers) {
+            if (this.identifiers[gamepadType].id.test(gamepad.id)) {
+                return gamepadType;
+            }
+        }
+
+        return "xbox-one";
+    }
+
+    /**
+     * Scans gamepads for activity
+     */
+    scan() {
+        // don't scan if we have an active gamepad
+        if (null !== this.index && null === this.disconnectedIndex) return;
+
+        // refresh gamepad information
+        this.pollGamepads();
+
+        for (let index = 0; index < this.gamepads.length; index++) {
+            if (
+                null !== this.disconnectedIndex &&
+                index !== this.disconnectedIndex
+            )
+                continue;
+
+            const gamepad = this.gamepads[index];
+            if (!gamepad) continue;
+
+            // read the gamepad buttons
+            let button;
+            for (
+                let buttonIndex = 0;
+                buttonIndex < gamepad.buttons.length;
+                buttonIndex++
+            ) {
+                button = gamepad.buttons[buttonIndex];
+
+                // if one of its button is pressed, activate this gamepad
+                if (button.pressed) {
+                    this.map(gamepad.index);
+
+                    // confirm mapping with a vibration when available
+                    if (gamepad.vibrationActuator) {
+                        gamepad.vibrationActuator.playEffect(
+                            gamepad.vibrationActuator.type,
+                            {
+                                duration: 100,
+                                strongMagnitude: 0.2,
+                                weakMagnitude: 1,
+                                startDelay: 0,
+                            }
+                        );
+                    }
+
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets a gamepad as active from its index
+     *
+     * @param {int} index
+     */
+    map(index) {
+        // ensure a gamepad need to be mapped
+        if ("undefined" === typeof index) return;
+
+        // hide the help messages
+        this.hideInstructions(true);
+        this.$helpPopout.removeClass("active");
+        this.hidePlaceholder(true);
+
+        // update local references
+        this.index = index;
+        this.disconnectedIndex = null;
+        this.$gamepad.removeClass("disconnected");
+        const gamepad = this.getActive();
+
+        // ensure that a gamepad was actually found for this index
+        if (!gamepad) {
+            // this mapping request was probably a mistake :
+            // - remove the active gamepad index and reference
+            this.index = null;
+            // - enqueue a display of the placeholder animation right away
+            this.displayPlaceholder(true);
+
+            return;
+        }
+
+        // ensure a valid gamepad type is used
+        this.type = this.getType(gamepad);
+        if (!this.type) return;
+
+        // initial setup of the gamepad
+        this.identifier = this.identifiers[this.type];
+
+        // update gamepad color and triggers selectors on overlay
+        this.updateColors();
+        this.updateTriggers();
+
+        // load the HTML template file
+        this.loadTemplate(gamepad);
+
+        // hide the help before displaying the template
+        this.hideInstructions();
+        this.hidePlaceholder();
+
+        // save statistics
+        if (!!window.ga) {
+            ga("send", "event", {
+                eventCategory: "Gamepad",
+                eventAction: "map",
+                eventLabel: "Map",
+                eventValue: this.identifier,
+            });
+        }
+    }
+
+    /**
+     * Disconnect the active gamepad
+     *
+     * @param {int} index
+     * @param {object} options
+     */
+    clear() {
+        // ensure we have something to disconnect
+        if (this.index === null) return;
+
+        // clear associated data
+        this.index = null;
+        this.disconnectedIndex = null;
+        this.debug = false;
+        this.lastTimestamp = null;
+        this.type = null;
+        this.identifier = null;
+        this.colorIndex = null;
+        this.colorName = null;
+        this.zoomLevel = 1;
+        this.$gamepad.empty();
+        this.updateColors();
+        this.updateTriggers();
+        this.clearUrlParams();
+
+        // save statistics
+        if (!!window.ga) {
+            ga("send", "event", {
+                eventCategory: "Gamepad",
+                eventAction: "disconnect",
+                eventLabel: "Disconnect",
+                eventValue: this.identifier,
+            });
+        }
+    }
+
+    /**
+     * Load the HTML template file for the active gamepad
+     *
+     * @param {*} gamepad
+     */
+    loadTemplate(gamepad) {
+        // hide the gamepad while we prepare it
+        this.$gamepad.hide();
+
+        $.ajax(`templates/${this.type}/template.html`).done((template) => {
+            // inject the template HTML
+            this.$gamepad.html(template);
+
+            // read for parameters to apply:
+            // - color
+            this.changeGamepadColor(this.getUrlParam("color"));
+            // - triggers mode
+            this.toggleTriggersMeter(this.getUrlParam("triggers") === "meter");
+            // - zoom$
+            window.setTimeout(() =>
+                this.changeZoom(
+                    this.type === "debug"
+                        ? "auto"
+                        : this.getUrlParam("zoom") || "auto"
+                )
+            );
+
+            // save the buttons mapping of this template
+            this.mapping.buttons = [];
+            for (let index = 0; index < gamepad.buttons.length; index++) {
+                this.mapping.buttons[index] = $(`[data-button="${index}"]`);
+            }
+
+            // save the axes mapping of this template
+            this.mapping.axes = [];
+            for (let index = 0; index < gamepad.axes.length; index++) {
+                this.mapping.axes[index] = $(
+                    `[data-axis=${index}], [data-axis-x=${index}], [data-axis-y=${index}], [data-axis-z=${index}]`
+                );
+            }
+
+            // enqueue the initial display refresh
+            this.pollStatus(true);
+
+            // once fully loaded, display the gamepad
+            this.$gamepad.fadeIn();
+        });
+    }
+
+    /**
+     * Updates the status of the active gamepad
+     */
+    pollStatus(force = false) {
+        // ensure that a gamepad is currently active
+        if (this.index === null) return;
+
+        // enqueue the next refresh
+        window.requestAnimationFrame(this.pollStatus.bind(this));
+
+        // load latest gamepad data
+        this.pollGamepads();
+        const activeGamepad = this.getActive();
+
+        // check for actual gamepad update
+        if (
+            !force &&
+            (!activeGamepad || activeGamepad.timestamp === this.lastTimestamp)
+        )
+            return;
+        this.lastTimestamp = activeGamepad.timestamp;
+
+        // actually update the active gamepad graphically
+        this.updateButtons(activeGamepad);
+        this.updateAxes(activeGamepad);
+    }
+
+    /**
+     * Updates the buttons status of the active gamepad
+     *
+     * @param {*} gamepad
+     */
+    updateButtons(gamepad) {
+        // update the buttons
+        for (let index = 0; index < gamepad.buttons.length; index++) {
+            // find the DOM element
+            const $button = this.mapping.buttons[index];
+            if (!$button) {
+                // nothing to do for this button if no DOM element exists
+                break;
+            }
+
+            // read the button data
+            const button = gamepad.buttons[index];
+
+            // update the display values
+            $button.attr("data-pressed", button.pressed);
+            $button.attr("data-value", button.value);
+
+            // hook the template defined button update method
+            if ("function" === typeof this.updateButton) {
+                this.updateButton($button);
+            }
+        }
+    }
+
+    /**
+     * Updates the axes status of the active gamepad
+     *
+     * @param {*} gamepad
+     */
+    updateAxes(gamepad) {
+        // update the axes
+        for (let index = 0; index < gamepad.axes.length; index++) {
+            // find the DOM element
+            const $axis = this.mapping.axes[index];
+            if (!$axis) {
+                // nothing to do for this button if no DOM element exists
+                break;
+            }
+
+            // read the axis data
+            const axis = gamepad.axes[index];
+
+            // update the display values
+            if ($axis.is("[data-axis=" + index + "]")) {
+                $axis.attr("data-value", axis);
+            }
+            if ($axis.is("[data-axis-x=" + index + "]")) {
+                $axis.attr("data-value-x", axis);
+            }
+            if ($axis.is("[data-axis-y=" + index + "]")) {
+                $axis.attr("data-value-y", axis);
+            }
+            if ($axis.is("[data-axis-z=" + index + "]")) {
+                $axis.attr("data-value-z", axis);
+            }
+
+            // hook the template defined axis update method
+            if ("function" === typeof this.updateAxis) {
+                this.updateAxis($axis);
+            }
+        }
+    }
+
+    /**
+     * Changes the skin
+     *
+     * @param {any} skin
+     */
+    changeSkin(skin) {
+        // update the visual skin selector
+        this.$skinSelect.val(skin);
+
+        // set the selected skin
+        this.debug = skin === 'debug';
+        this.updateUrlParams({ type: skin !== "auto" ? skin : undefined });
+        this.map(this.index);
+    }
+
+    /**
+     * Changes the background style
+     *
+     * @param {any} style
+     */
+    changeBackgroundStyle(style) {
+        if ("undefined" === typeof style) {
+            this.backgroundStyleIndex++;
+            if (this.backgroundStyleIndex > this.backgroundStyle.length - 1) {
+                this.backgroundStyleIndex = 0;
+            }
+        } else if ("string" === typeof style) {
+            this.backgroundStyleIndex = this.backgroundStyle.findIndex(
+                (s) => s === style
+            );
+        } else {
+            this.backgroundStyleIndex = style;
+        }
+        this.backgroundStyleName =
+            this.backgroundStyle[this.backgroundStyleIndex];
+
+        this.$body.css({
+            background:
+                this.backgroundStyleName === "checkered"
+                    ? "url(css/transparent-bg.png)"
+                    : this.backgroundStyleName,
+            color: this.textColors[this.backgroundStyleIndex],
+        });
+
+        // update current settings
+        this.updateUrlParams({ background: this.backgroundStyleName });
+        this.$backgroundSelect.val(this.backgroundStyleName);
+
+        // save statistics
+        if (!!window.ga) {
+            ga("send", "event", {
+                eventCategory: "Gamepad",
+                eventAction: "change-background-color",
+                eventLabel: "Change Background Color",
+                eventValue: this.backgroundStyleName,
+            });
+        }
+    }
+
+    /**
+     * Changes the active gamepad color
+     *
+     * @param {any} color
+     */
+    changeGamepadColor(color) {
+        // ensure that a gamepad is currently active
+        if (this.index === null) return;
+
+        if ("undefined" === typeof color) {
+            // no color was specified, load the next one in list
+            this.colorIndex++;
+            if (this.colorIndex > this.identifier.colors.length - 1) {
+                this.colorIndex = 0;
+            }
+        } else if ("string" === typeof style) {
+            this.colorIndex = this.identifier.colors.findIndex(
+                (c) => c === color
+            );
+        } else {
+            if (!isNaN(parseInt(color))) {
+                // the color is a number, load it by its index
+                this.colorIndex = color;
+            } else {
+                // the color is a string, load it by its name
+                this.colorIndex = 0;
+                for (let gamepadColorIndex in this.identifier.colors) {
+                    if (color === this.identifier.colors[gamepadColorIndex]) {
+                        this.colorIndex = gamepadColorIndex;
+                        break;
+                    }
+                }
+            }
+        }
+        this.colorName = this.identifier.colors
+            ? this.identifier.colors[this.colorIndex]
+            : null;
+
+        // update the DOM with the color value
+        this.$gamepad.attr("data-color", this.colorName);
+
+        // update current settings
+        this.updateUrlParams({ color: this.colorName });
+        this.$colorSelect.val(this.colorName);
+
+        // save statistics
+        if (!!window.ga) {
+            ga("send", "event", {
+                eventCategory: "Gamepad",
+                eventAction: "change-gamepad-color",
+                eventLabel: "Change Gamepad Color",
+                eventValue: this.colorName,
+            });
+        }
+    }
+
+    /**
+     * Changes the active gamepad zoom level
+     *
+     * @param {any} level
+     */
+    changeZoom(level) {
+        // ensure that a gamepad is currently active
+        if (this.index === null) return;
+
+        // ensure we have some data to process
+        if (typeof level === "undefined") return;
+
+        this.zoomMode = level === "auto" ? "auto" : "manual";
+
+        if (this.zoomMode === "auto") {
+            // "auto" means a "contained in window" zoom, with a max zoom of 1
+            this.zoomLevel = Math.min(
+                window.innerWidth / this.$gamepad.width(),
+                window.innerHeight / this.$gamepad.height(),
+                1
+            );
+        } else if (level === 0) {
+            // 0 means a zoom reset
+            this.zoomLevel = 1;
+        } else if (level === "+" && this.zoomLevel < 2) {
+            // "+" means a zoom in if we still can
+            this.zoomLevel += 0.1;
+        } else if (level === "-" && this.zoomLevel > 0.1) {
+            // "-" means a zoom out if we still can
+            this.zoomLevel -= 0.1;
+        } else if (!isNaN((level = parseFloat(level)))) {
+            // an integer value means a value-based zoom
+            this.zoomLevel = level;
+        }
+
+        // hack: fix js float issues
+        this.zoomLevel = +this.zoomLevel.toFixed(2);
+
+        // update the DOM with the zoom value
+        this.$gamepad.css(
+            "transform",
+            `translate(-50%, -50%) scale(${this.zoomLevel}, ${this.zoomLevel})`
+        );
+
+        // update current settings
+        this.updateUrlParams({
+            zoom: this.zoomMode === "auto" ? undefined : this.zoomLevel,
+        });
+
+        // save statistics
+        if (!!window.ga) {
+            ga("send", "event", {
+                eventCategory: "Gamepad",
+                eventAction: "change-zoom",
+                eventLabel: "Change Zoom",
+                eventValue: this.zoomLevel,
+            });
+        }
+    }
+
+    /**
+     * Toggles the debug template for the active gamepad, if any
+     */
+    toggleGamepadType() {
+        // ensure that a gamepad is currently active
+        if (this.index === null || this.type === null) return;
+
+        // toggle debug off
+        this.debug = false;
+
+        // compute next type
+        const types = Object.keys(this.identifiers).filter(
+            (i) => i !== "debug"
+        );
+        let typeIndex = types.reduce((typeIndex, type, index) => {
+            return type === this.type ? index : typeIndex;
+        }, 0);
+        this.type = types[++typeIndex >= types.length ? 0 : typeIndex];
+
+        // save statistics
+        if (!!window.ga) {
+            ga("send", "event", {
+                eventCategory: "Gamepad",
+                eventAction: "toggle-type",
+                eventLabel: "Toggle Type",
+                eventValue: this.type,
+            });
+        }
+
+        // update current settings
+        this.updateUrlParams({ type: this.type });
+
+        // remap current gamepad
+        this.map(this.index);
+    }
+
+    /**
+     * Toggles the debug template for the active gamepad, if any
+     */
+    toggleDebug(debug = null) {
+        // ensure that a gamepad is currently active
+        if (this.index === null) return;
+
+        // update debug value
+        this.debug = debug !== null ? debug : !this.debug;
+
+        // save statistics
+        if (!!window.ga) {
+            ga("send", "event", {
+                eventCategory: "Gamepad",
+                eventAction: "toggle-debug",
+                eventLabel: "Toggle Debug",
+                eventValue: this.debug,
+            });
+        }
+
+        // update current settings
+        this.changeSkin(this.debug ? 'debug' : 'auto')
+    }
+
+    /**
+     * Toggles the on-screen help message
+     */
+    toggleHelp() {
+        // refresh gamepad lsit with latest data
+        this.buildHelpGamepadList();
+
+        // display the help popout
+        this.$helpPopout.toggleClass("active");
+        this.helpVisible = this.$helpPopout.is(".active");
+
+        // save statistics
+        if (!!window.ga) {
+            ga("send", "event", {
+                eventCategory: "Gamepad",
+                eventAction: "toggle-help",
+                eventLabel: "Toggle Help",
+                eventValue: this.$helpPopout.is("active"),
+            });
+        }
+    }
+
+    /**
+     * Toggles the triggers meter display
+     */
+    toggleTriggersMeter(useMeter) {
+        // ensure that a gamepad is currently active
+        if (this.index === null) return;
+
+        this.triggersMeter =
+            useMeter !== undefined ? useMeter : !this.triggersMeter;
+        this.$gamepad[this.triggersMeter ? "addClass" : "removeClass"](
+            "triggers-meter"
+        );
+
+        // update current settings
+        const triggers = this.triggersMeter ? "meter" : "opacity";
+        this.updateUrlParams({ triggers });
+        this.$triggersSelect.val(triggers);
+    }
+
+    /**
+     * Reads an URL search parameter
+     *
+     * @param {*} name
+     */
+    getUrlParam(name) {
+        let matches = new RegExp("[?&]" + name + "(=([^&#]*))?").exec(
+            window.location.search
+        );
+        return matches ? decodeURIComponent(matches[2] || true) || true : null;
+    }
+
+    /**
+     * Read url settings to produce a key/value object
+     */
+    getUrlParams() {
+        const settingsArr = window.location.search
+            .replace("?", "")
+            .split("&")
+            .map((param) => param.split("="));
+        const settings = {};
+        Object.keys(settingsArr).forEach((key) => {
+            const [k, v] = settingsArr[key];
+            settings[k] = v;
+        });
+        return settings;
+    }
+
+    /**
+     * Clear all url settings
+     */
+    clearUrlParams() {
+        this.updateUrlParams({
+            type: undefined,
+            color: undefined,
+            debug: undefined,
+            triggers: undefined,
+            zoom: undefined,
+        });
+    }
+
+    /**
+     * Update url hash with new settings
+     *
+     * @param {*} newParams
+     */
+    updateUrlParams(newParams) {
+        const params = Object.assign(this.getUrlParams(), newParams);
+        const query = Object.entries(params)
+            .filter(([, value]) => value !== undefined && value !== null)
+            .map(([key, value]) => `${key}=${value}`)
+            .join("&");
+        window.history.replaceState({}, document.title, `/?${query}`);
+    }
+}
+
+window.gamepad = new Gamepad();
