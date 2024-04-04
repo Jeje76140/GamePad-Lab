@@ -103,7 +103,7 @@ class Gamepad {
         this.scanDelay = 200;
         this.debug = false;
         this.index = null;
-        this.disconnectedIndex = null;
+        this.disconnectedIndex = 0;
         this.type = null;
         this.identifier = null;
         this.lastTimestamp = null;
