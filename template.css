@@ -21,6 +21,7 @@
 
 #gamepad.disconnected {
     background-image: url(https://jeje76140.github.io/PS5_CONTROLLER/disconnected.png);
+    zoom:.55;
 }
 
 #gamepad.disconnected div {
