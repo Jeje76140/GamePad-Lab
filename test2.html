@@ -33,6 +33,14 @@
         #buttonCircle { right: 40px; top: 50%; transform: translateY(-50%); }
         #buttonSquare { left: 40px; top: 50%; transform: translateY(-50%); }
         #buttonTriangle { top: 20px; right: 80px; }
+        #buttonL1 { top: 10px; left: 80px; }
+        #buttonR1 { top: 10px; right: 80px; }
+        #buttonL2 { top: -20px; left: 80px; }
+        #buttonR2 { top: -20px; right: 80px; }
+        #buttonShare { left: 120px; top: 50%; transform: translateY(-50%); }
+        #buttonOptions { right: 120px; top: 50%; transform: translateY(-50%); }
+        #buttonPS { bottom: 10px; left: 50%; transform: translateX(-50%); }
+        #buttonTouchpad { top: 30px; left: 50%; transform: translateX(-50%); width: 80px; height: 40px; }
         .stick {
             position: absolute;
             width: 20px;
@@ -51,6 +59,14 @@
         <div id="buttonCircle" class="button">O</div>
         <div id="buttonSquare" class="button">□</div>
         <div id="buttonTriangle" class="button">△</div>
+        <div id="buttonL1" class="button">L1</div>
+        <div id="buttonR1" class="button">R1</div>
+        <div id="buttonL2" class="button">L2</div>
+        <div id="buttonR2" class="button">R2</div>
+        <div id="buttonShare" class="button">SH</div>
+        <div id="buttonOptions" class="button">OP</div>
+        <div id="buttonPS" class="button">PS</div>
+        <div id="buttonTouchpad" class="button">TP</div>
         <div id="leftStick" class="stick"></div>
         <div id="rightStick" class="stick"></div>
     </div>
@@ -71,6 +87,14 @@
             document.getElementById("buttonCircle").classList.toggle("pressed", gp.buttons[1].pressed);
             document.getElementById("buttonSquare").classList.toggle("pressed", gp.buttons[2].pressed);
             document.getElementById("buttonTriangle").classList.toggle("pressed", gp.buttons[3].pressed);
+            document.getElementById("buttonL1").classList.toggle("pressed", gp.buttons[4].pressed);
+            document.getElementById("buttonR1").classList.toggle("pressed", gp.buttons[5].pressed);
+            document.getElementById("buttonL2").classList.toggle("pressed", gp.buttons[6].pressed);
+            document.getElementById("buttonR2").classList.toggle("pressed", gp.buttons[7].pressed);
+            document.getElementById("buttonShare").classList.toggle("pressed", gp.buttons[8].pressed);
+            document.getElementById("buttonOptions").classList.toggle("pressed", gp.buttons[9].pressed);
+            document.getElementById("buttonPS").classList.toggle("pressed", gp.buttons[10].pressed);
+            document.getElementById("buttonTouchpad").classList.toggle("pressed", gp.buttons[13].pressed);
             
             // Joysticks
             const leftStick = document.getElementById("leftStick");
