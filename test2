@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afficheur Manette PS5</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .controller { display: inline-block; padding: 20px; border: 2px solid black; }
+        .button { display: inline-block; width: 40px; height: 40px; margin: 5px; background: lightgray; border-radius: 50%; line-height: 40px; }
+        .pressed { background: red; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Afficheur Manette PS5</h1>
+    <div class="controller">
+        <div id="buttonCross" class="button">X</div>
+        <div id="buttonCircle" class="button">O</div>
+        <div id="buttonSquare" class="button">□</div>
+        <div id="buttonTriangle" class="button">△</div>
+        <p>Joystick Gauche: <span id="leftStick">(0,0)</span></p>
+        <p>Joystick Droit: <span id="rightStick">(0,0)</span></p>
+    </div>
+    
+    <script>
+        window.addEventListener("gamepadconnected", (event) => {
+            console.log("Manette connectée :", event.gamepad.id);
+            updateGamepad();
+        });
+
+        function updateGamepad() {
+            const gamepads = navigator.getGamepads();
+            const gp = gamepads[0];
+            if (!gp) return;
+            
+            // Boutons
+            document.getElementById("buttonCross").classList.toggle("pressed", gp.buttons[0].pressed);
+            document.getElementById("buttonCircle").classList.toggle("pressed", gp.buttons[1].pressed);
+            document.getElementById("buttonSquare").classList.toggle("pressed", gp.buttons[2].pressed);
+            document.getElementById("buttonTriangle").classList.toggle("pressed", gp.buttons[3].pressed);
+            
+            // Joysticks
+            document.getElementById("leftStick").textContent = `(${gp.axes[0].toFixed(2)}, ${gp.axes[1].toFixed(2)})`;
+            document.getElementById("rightStick").textContent = `(${gp.axes[2].toFixed(2)}, ${gp.axes[3].toFixed(2)})`;
+            
+            requestAnimationFrame(updateGamepad);
+        }
+    </script>
+</body>
+</html>
