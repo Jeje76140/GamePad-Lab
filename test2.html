@@ -5,10 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Afficheur Manette PS5</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .controller { display: inline-block; padding: 20px; border: 2px solid black; }
-        .button { display: inline-block; width: 40px; height: 40px; margin: 5px; background: lightgray; border-radius: 50%; line-height: 40px; }
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #282c34; color: white; }
+        .controller {
+            position: relative;
+            width: 400px;
+            height: 250px;
+            margin: 50px auto;
+            background: #444;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        .button {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: lightgray;
+            border-radius: 50%;
+            line-height: 40px;
+            text-align: center;
+            font-weight: bold;
+        }
         .pressed { background: red; color: white; }
+        #buttonCross { bottom: 20px; right: 80px; }
+        #buttonCircle { right: 40px; top: 50%; transform: translateY(-50%); }
+        #buttonSquare { left: 40px; top: 50%; transform: translateY(-50%); }
+        #buttonTriangle { top: 20px; right: 80px; }
+        .stick {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: blue;
+            border-radius: 50%;
+        }
+        #leftStick { left: 60px; bottom: 50px; }
+        #rightStick { right: 60px; bottom: 50px; }
     </style>
 </head>
 <body>
@@ -18,8 +51,8 @@
         <div id="buttonCircle" class="button">O</div>
         <div id="buttonSquare" class="button">□</div>
         <div id="buttonTriangle" class="button">△</div>
-        <p>Joystick Gauche: <span id="leftStick">(0,0)</span></p>
-        <p>Joystick Droit: <span id="rightStick">(0,0)</span></p>
+        <div id="leftStick" class="stick"></div>
+        <div id="rightStick" class="stick"></div>
     </div>
     
     <script>
@@ -40,8 +73,10 @@
             document.getElementById("buttonTriangle").classList.toggle("pressed", gp.buttons[3].pressed);
             
             // Joysticks
-            document.getElementById("leftStick").textContent = `(${gp.axes[0].toFixed(2)}, ${gp.axes[1].toFixed(2)})`;
-            document.getElementById("rightStick").textContent = `(${gp.axes[2].toFixed(2)}, ${gp.axes[3].toFixed(2)})`;
+            const leftStick = document.getElementById("leftStick");
+            const rightStick = document.getElementById("rightStick");
+            leftStick.style.transform = `translate(${gp.axes[0] * 20}px, ${gp.axes[1] * 20}px)`;
+            rightStick.style.transform = `translate(${gp.axes[2] * 20}px, ${gp.axes[3] * 20}px)`;
             
             requestAnimationFrame(updateGamepad);
         }
