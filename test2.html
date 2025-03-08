@@ -112,15 +112,9 @@
             
             // Flèches directionnelles
             document.getElementById("buttonUp").classList.toggle("pressed", gp.buttons[12].pressed);
-            document.getElementById("buttonDown").classList.toggle("pressed", gp.buttons[13].pressed);
-            document.getElementById("buttonLeft").classList.toggle("pressed", gp.buttons[14].pressed);
-            document.getElementById("buttonRight").classList.toggle("pressed", gp.buttons[15].pressed);
-            
-            // Joysticks
-            const leftStick = document.getElementById("leftStick");
-            const rightStick = document.getElementById("rightStick");
-            leftStick.style.transform = `translate(${gp.axes[0] * 20}px, ${gp.axes[1] * 20}px)`;
-            rightStick.style.transform = `translate(${gp.axes[2] * 20}px, ${gp.axes[3] * 20}px)`;
+            document.getElementById("buttonDown").classList.toggle("pressed", gp.buttons[14].pressed);
+            document.getElementById("buttonLeft").classList.toggle("pressed", gp.buttons[15].pressed);
+            document.getElementById("buttonRight").classList.toggle("pressed", gp.buttons[16].pressed);
             
             requestAnimationFrame(updateGamepad);
         }
