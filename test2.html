@@ -41,6 +41,13 @@
         #buttonOptions { right: 120px; top: 50%; transform: translateY(-50%); }
         #buttonPS { bottom: 10px; left: 50%; transform: translateX(-50%); }
         #buttonTouchpad { top: 30px; left: 50%; transform: translateX(-50%); width: 80px; height: 40px; }
+        
+        /* Flèches directionnelles */
+        #buttonUp { top: 60px; left: 80px; }
+        #buttonDown { top: 120px; left: 80px; }
+        #buttonLeft { top: 90px; left: 50px; }
+        #buttonRight { top: 90px; left: 110px; }
+        
         .stick {
             position: absolute;
             width: 20px;
@@ -67,6 +74,13 @@
         <div id="buttonOptions" class="button">OP</div>
         <div id="buttonPS" class="button">PS</div>
         <div id="buttonTouchpad" class="button">TP</div>
+        
+        <!-- Flèches directionnelles -->
+        <div id="buttonUp" class="button">↑</div>
+        <div id="buttonDown" class="button">↓</div>
+        <div id="buttonLeft" class="button">←</div>
+        <div id="buttonRight" class="button">→</div>
+        
         <div id="leftStick" class="stick"></div>
         <div id="rightStick" class="stick"></div>
     </div>
@@ -95,6 +109,12 @@
             document.getElementById("buttonOptions").classList.toggle("pressed", gp.buttons[9].pressed);
             document.getElementById("buttonPS").classList.toggle("pressed", gp.buttons[10].pressed);
             document.getElementById("buttonTouchpad").classList.toggle("pressed", gp.buttons[13].pressed);
+            
+            // Flèches directionnelles
+            document.getElementById("buttonUp").classList.toggle("pressed", gp.buttons[12].pressed);
+            document.getElementById("buttonDown").classList.toggle("pressed", gp.buttons[13].pressed);
+            document.getElementById("buttonLeft").classList.toggle("pressed", gp.buttons[14].pressed);
+            document.getElementById("buttonRight").classList.toggle("pressed", gp.buttons[15].pressed);
             
             // Joysticks
             const leftStick = document.getElementById("leftStick");
