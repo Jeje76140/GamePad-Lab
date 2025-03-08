@@ -108,7 +108,7 @@
             document.getElementById("buttonShare").classList.toggle("pressed", gp.buttons[8].pressed);
             document.getElementById("buttonOptions").classList.toggle("pressed", gp.buttons[9].pressed);
             document.getElementById("buttonPS").classList.toggle("pressed", gp.buttons[10].pressed);
-            document.getElementById("buttonTouchpad").classList.toggle("pressed", gp.buttons[13].pressed);
+            document.getElementById("buttonTouchpad").classList.toggle("pressed", gp.buttons[17]?.pressed || gp.buttons[13].pressed);
             
             // Flèches directionnelles
             document.getElementById("buttonUp").classList.toggle("pressed", gp.buttons[12].pressed);
