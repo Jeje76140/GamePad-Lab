@@ -41,6 +41,8 @@
         #buttonOptions { right: 120px; top: 50%; transform: translateY(-50%); }
         #buttonPS { bottom: 10px; left: 50%; transform: translateX(-50%); }
         #buttonTouchpad { top: 30px; left: 50%; transform: translateX(-50%); width: 80px; height: 40px; }
+        #buttonL3 { bottom: 50px; left: 60px; }
+        #buttonR3 { bottom: 50px; right: 60px; }
         
         /* Flèches directionnelles */
         #buttonUp { top: 60px; left: 80px; }
@@ -55,8 +57,6 @@
             background: blue;
             border-radius: 50%;
         }
-        #leftStick { left: 60px; bottom: 50px; }
-        #rightStick { right: 60px; bottom: 50px; }
     </style>
 </head>
 <body>
@@ -74,15 +74,14 @@
         <div id="buttonOptions" class="button">OP</div>
         <div id="buttonPS" class="button">PS</div>
         <div id="buttonTouchpad" class="button">TP</div>
+        <div id="buttonL3" class="button">L3</div>
+        <div id="buttonR3" class="button">R3</div>
         
         <!-- Flèches directionnelles -->
         <div id="buttonUp" class="button">↑</div>
         <div id="buttonDown" class="button">↓</div>
         <div id="buttonLeft" class="button">←</div>
         <div id="buttonRight" class="button">→</div>
-        
-        <div id="leftStick" class="stick"></div>
-        <div id="rightStick" class="stick"></div>
     </div>
     
     <script>
@@ -109,6 +108,8 @@
             document.getElementById("buttonOptions").classList.toggle("pressed", gp.buttons[9].pressed);
             document.getElementById("buttonPS").classList.toggle("pressed", gp.buttons[10].pressed);
             document.getElementById("buttonTouchpad").classList.toggle("pressed", gp.buttons[17]?.pressed || gp.buttons[13].pressed);
+            document.getElementById("buttonL3").classList.toggle("pressed", gp.buttons[11].pressed);
+            document.getElementById("buttonR3").classList.toggle("pressed", gp.buttons[12].pressed);
             
             // Flèches directionnelles
             document.getElementById("buttonUp").classList.toggle("pressed", gp.buttons[12].pressed);
