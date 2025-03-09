@@ -219,6 +219,7 @@
             Object.keys(buttonMap).forEach(button => {
                 const buttonElement = document.querySelector(`.ds4 .${button}`);
                 if (buttonElement) {
+                    // Si le bouton est pressé, ajoute la classe "pressed", sinon la supprime
                     buttonElement.classList.toggle("pressed", gp.buttons[buttonMap[button]]?.pressed);
                 }
             });
