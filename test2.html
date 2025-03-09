@@ -14,6 +14,47 @@
             background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/manette.png) no-repeat center;
             background-size: cover;
         }
+        .ds4 .abxy {
+            position: absolute;
+            width: 170px;
+            height: 171px;
+            top: 159px;
+            left: 570px;
+        }
+
+        .ds4 .button {
+            position: absolute;
+            width: 55px;
+            height: 55px;
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/button.png);
+        }
+
+        .ds4 .button.pressed {
+            background-position-y: 55px;
+        }
+
+        .ds4 .a {
+            background-position: 0 0;
+            bottom: 0;
+            left: 58px;
+        }
+
+        .ds4 .b {
+            background-position: -57px 0;
+            top: 58px;
+            right: 0px;
+        }
+
+        .ds4 .x {
+            background-position: -113px 0;
+            top: 58px;
+        }
+
+        .ds4 .y {
+            background-position: 55px 0;
+            left: 58px;
+        }
+
         .button, .trigger {
             position: absolute;
             width: 40px;
@@ -24,16 +65,19 @@
             text-align: center;
             font-weight: bold;
         }
+
         .trigger {
             width: 99px;
             height: 100px;
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/tricker.png) no-repeat center;
+            background: url(PS4_CONTROLLER/Akatsuki/tricker.png) no-repeat center;
             background-size: contain;
             opacity: 0;
         }
+        
         .trigger.pressed {
             opacity: 1;
         }
+
         .pressed { background: red; color: white; opacity: 1; }
         .stick {
             position: absolute;
@@ -43,6 +87,7 @@
             border-radius: 50%;
             transition: transform 0.1s linear;
         }
+
         #leftStick { left: 180px; bottom: 180px; }
         #rightStick { right: 180px; bottom: 180px; }
         #dpad-up { left: 110px; top: 240px; }
@@ -67,7 +112,13 @@
 </head>
 <body>
     <h1>Afficheur Manette PS5</h1>
-    <div class="controller">
+    <div class="controller ds4">
+        <div class="abxy">
+            <div id="buttonA" class="button a"></div>
+            <div id="buttonB" class="button b"></div>
+            <div id="buttonX" class="button x"></div>
+            <div id="buttonY" class="button y"></div>
+        </div>
         <div id="buttonCross" class="button">X</div>
         <div id="buttonCircle" class="button">O</div>
         <div id="buttonSquare" class="button">□</div>
@@ -89,6 +140,7 @@
         <div id="leftStick" class="stick"></div>
         <div id="rightStick" class="stick"></div>
     </div>
+
     <script>
         window.addEventListener("gamepadconnected", () => {
             updateGamepad();
@@ -102,7 +154,8 @@
                 "buttonCross", "buttonCircle", "buttonSquare", "buttonTriangle",
                 "buttonL1", "buttonR1", "buttonL2", "buttonR2",
                 "buttonShare", "buttonOptions", "buttonPS", "buttonL3", "buttonR3",
-                "dpad-up", "dpad-down", "dpad-left", "dpad-right", "buttonTouchpad"
+                "dpad-up", "dpad-down", "dpad-left", "dpad-right", "buttonTouchpad",
+                "buttonA", "buttonB", "buttonX", "buttonY"
             ];
 
             buttonMap.forEach((id, index) => {
