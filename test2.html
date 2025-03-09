@@ -29,34 +29,18 @@
             font-weight: bold;
         }
         .pressed { background: red; color: white; }
-        #buttonCross { bottom: 20px; right: 80px; }
-        #buttonCircle { right: 40px; top: 50%; transform: translateY(-50%); }
-        #buttonSquare { left: 40px; top: 50%; transform: translateY(-50%); }
-        #buttonTriangle { top: 20px; right: 80px; }
-        #buttonL1 { top: 10px; left: 80px; }
-        #buttonR1 { top: 10px; right: 80px; }
-        #buttonL2 { top: -20px; left: 80px; }
-        #buttonR2 { top: -20px; right: 80px; }
-        #buttonShare { left: 120px; top: 50%; transform: translateY(-50%); }
-        #buttonOptions { right: 120px; top: 50%; transform: translateY(-50%); }
-        #buttonPS { bottom: 10px; left: 50%; transform: translateX(-50%); }
-        #buttonTouchpad { top: 30px; left: 50%; transform: translateX(-50%); width: 80px; height: 40px; }
-        #buttonL3 { bottom: 50px; left: 60px; }
-        #buttonR3 { bottom: 50px; right: 60px; }
-        
-        /* Flèches directionnelles */
-        #buttonUp { top: 60px; left: 80px; }
-        #buttonDown { top: 120px; left: 80px; }
-        #buttonLeft { top: 90px; left: 50px; }
-        #buttonRight { top: 90px; left: 110px; }
         
         .stick {
             position: absolute;
-            width: 20px;
-            height: 20px;
+            width: 40px;
+            height: 40px;
             background: blue;
             border-radius: 50%;
+            transition: transform 0.1s linear;
         }
+        #leftStick { left: 80px; bottom: 60px; }
+        #rightStick { right: 80px; bottom: 60px; }
+        
     </style>
 </head>
 <body>
@@ -66,22 +50,11 @@
         <div id="buttonCircle" class="button">O</div>
         <div id="buttonSquare" class="button">□</div>
         <div id="buttonTriangle" class="button">△</div>
-        <div id="buttonL1" class="button">L1</div>
-        <div id="buttonR1" class="button">R1</div>
-        <div id="buttonL2" class="button">L2</div>
-        <div id="buttonR2" class="button">R2</div>
-        <div id="buttonShare" class="button">SH</div>
-        <div id="buttonOptions" class="button">OP</div>
-        <div id="buttonPS" class="button">PS</div>
-        <div id="buttonTouchpad" class="button">TP</div>
         <div id="buttonL3" class="button">L3</div>
         <div id="buttonR3" class="button">R3</div>
         
-        <!-- Flèches directionnelles -->
-        <div id="buttonUp" class="button">↑</div>
-        <div id="buttonDown" class="button">↓</div>
-        <div id="buttonLeft" class="button">←</div>
-        <div id="buttonRight" class="button">→</div>
+        <div id="leftStick" class="stick"></div>
+        <div id="rightStick" class="stick"></div>
     </div>
     
     <script>
@@ -95,27 +68,16 @@
             const gp = gamepads[0];
             if (!gp) return;
             
-            // Boutons
-            document.getElementById("buttonCross").classList.toggle("pressed", gp.buttons[0].pressed);
-            document.getElementById("buttonCircle").classList.toggle("pressed", gp.buttons[1].pressed);
-            document.getElementById("buttonSquare").classList.toggle("pressed", gp.buttons[2].pressed);
-            document.getElementById("buttonTriangle").classList.toggle("pressed", gp.buttons[3].pressed);
-            document.getElementById("buttonL1").classList.toggle("pressed", gp.buttons[4].pressed);
-            document.getElementById("buttonR1").classList.toggle("pressed", gp.buttons[5].pressed);
-            document.getElementById("buttonL2").classList.toggle("pressed", gp.buttons[6].pressed);
-            document.getElementById("buttonR2").classList.toggle("pressed", gp.buttons[7].pressed);
-            document.getElementById("buttonShare").classList.toggle("pressed", gp.buttons[8].pressed);
-            document.getElementById("buttonOptions").classList.toggle("pressed", gp.buttons[9].pressed);
-            document.getElementById("buttonPS").classList.toggle("pressed", gp.buttons[10].pressed);
-            document.getElementById("buttonTouchpad").classList.toggle("pressed", gp.buttons[17]?.pressed);
+            // Boutons sticks cliquables
             document.getElementById("buttonL3").classList.toggle("pressed", gp.buttons[11].pressed);
             document.getElementById("buttonR3").classList.toggle("pressed", gp.buttons[12].pressed);
             
-            // Flèches directionnelles
-            document.getElementById("buttonUp").classList.toggle("pressed", gp.buttons[12].pressed);
-            document.getElementById("buttonDown").classList.toggle("pressed", gp.buttons[13].pressed);
-            document.getElementById("buttonLeft").classList.toggle("pressed", gp.buttons[14].pressed);
-            document.getElementById("buttonRight").classList.toggle("pressed", gp.buttons[15].pressed);
+            // Mouvements des sticks
+            const leftStick = document.getElementById("leftStick");
+            const rightStick = document.getElementById("rightStick");
+            
+            leftStick.style.transform = `translate(${gp.axes[0] * 10}px, ${gp.axes[1] * 10}px)`;
+            rightStick.style.transform = `translate(${gp.axes[2] * 10}px, ${gp.axes[3] * 10}px)`;
             
             requestAnimationFrame(updateGamepad);
         }
