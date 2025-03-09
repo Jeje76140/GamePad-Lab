@@ -14,6 +14,8 @@
             background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/manette.png) no-repeat center;
             background-size: cover;
         }
+
+        /* Design spécifique pour les boutons Crois, Triangle, Rond et Carré */
         .ds4 .abxy {
             position: absolute;
             width: 170px;
@@ -73,7 +75,7 @@
             background-size: contain;
             opacity: 0;
         }
-        
+
         .trigger.pressed {
             opacity: 1;
         }
@@ -114,15 +116,14 @@
     <h1>Afficheur Manette PS5</h1>
     <div class="controller ds4">
         <div class="abxy">
-            <div id="buttonA" class="button a"></div>
-            <div id="buttonB" class="button b"></div>
+            <!-- Design spécifique pour les boutons A, B, X, Y -->
             <div id="buttonX" class="button x"></div>
-            <div id="buttonY" class="button y"></div>
+            <div id="buttonTriangle" class="button y"></div>
+            <div id="buttonCircle" class="button b"></div>
+            <div id="buttonSquare" class="button a"></div>
         </div>
+        <!-- Les autres boutons de la manette restent inchangés -->
         <div id="buttonCross" class="button">X</div>
-        <div id="buttonCircle" class="button">O</div>
-        <div id="buttonSquare" class="button">□</div>
-        <div id="buttonTriangle" class="button">△</div>
         <div id="dpad-up" class="button">▲</div>
         <div id="dpad-down" class="button">▼</div>
         <div id="dpad-left" class="button">◀</div>
@@ -154,8 +155,7 @@
                 "buttonCross", "buttonCircle", "buttonSquare", "buttonTriangle",
                 "buttonL1", "buttonR1", "buttonL2", "buttonR2",
                 "buttonShare", "buttonOptions", "buttonPS", "buttonL3", "buttonR3",
-                "dpad-up", "dpad-down", "dpad-left", "dpad-right", "buttonTouchpad",
-                "buttonA", "buttonB", "buttonX", "buttonY"
+                "dpad-up", "dpad-down", "dpad-left", "dpad-right", "buttonTouchpad"
             ];
 
             buttonMap.forEach((id, index) => {
