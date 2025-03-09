@@ -231,11 +231,8 @@
             // Mise à jour pour les bumpers : vérifier si L1 ou R1 est pressé
             const leftBumper = document.querySelector('.ds4 .bumper.left');
             const rightBumper = document.querySelector('.ds4 .bumper.right');
-            leftBumper.classList.toggle("pressed", gp.buttons[4]?.pressed); // L1
-            rightBumper.classList.toggle("pressed", gp.buttons[5]?.pressed); // R1
-
-            document.getElementById("leftStick").style.transform = `translate(${gp.axes[0] * 10}px, ${gp.axes[1] * 10}px)`;
-            document.getElementById("rightStick").style.transform = `translate(${gp.axes[2] * 10}px, ${gp.axes[3] * 10}px)`;
+            leftBumper.classList.toggle("pressed", gp.buttons[4]?.pressed);  // L1 est l'index 4
+            rightBumper.classList.toggle("pressed", gp.buttons[5]?.pressed); // R1 est l'index 5
 
             requestAnimationFrame(updateGamepad);
         }
