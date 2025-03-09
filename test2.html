@@ -15,6 +15,16 @@
             background-size: cover;
         }
 
+        /* Style de déconnexion */
+        .ds4.disconnected {
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/disconnected.png) no-repeat center;
+            background-size: cover;
+        }
+
+        .ds4.disconnected div {
+            display: none;
+        }
+
         /* Design spécifique pour les boutons Crois, Triangle, Rond et Carré */
         .ds4 .abxy {
             position: absolute;
@@ -28,7 +38,7 @@
             position: absolute;
             width: 55px;
             height: 55px;
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/button.png);
+            background: url(PS4_CONTROLLER/Akatsuki/button.png);
         }
 
         .ds4 .button.pressed {
@@ -144,7 +154,12 @@
 
     <script>
         window.addEventListener("gamepadconnected", () => {
+            document.querySelector(".ds4").classList.remove("disconnected");
             updateGamepad();
+        });
+
+        window.addEventListener("gamepaddisconnected", () => {
+            document.querySelector(".ds4").classList.add("disconnected");
         });
 
         function updateGamepad() {
