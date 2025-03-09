@@ -11,7 +11,7 @@
             width: 806px;
             height: 598px;
             margin: 50px auto;
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/manette.png) no-repeat center;
+            background: url(PS4_CONTROLLER/Akatsuki/manette.png) no-repeat center;
             background-size: cover;
         }
 
@@ -38,7 +38,7 @@
             position: absolute;
             width: 55px;
             height: 55px;
-            background: url(PS4_CONTROLLER/Akatsuki/button.png);
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/button.png);
         }
 
         .ds4 .button.pressed {
@@ -126,11 +126,11 @@
     <h1>Afficheur Manette PS5</h1>
     <div class="controller ds4">
         <div class="abxy">
-            <!-- Regroupement des boutons Crois, Triangle, Rond et Carré -->
-            <span class="button a" data-name="button-1"></span>
-            <span class="button b" data-name="button-2"></span>
-            <span class="button x" data-name="button-3"></span>
-            <span class="button y" data-name="button-4"></span>
+            <!-- Regroupement des boutons Croix, Rond, Carré et Triangle -->
+            <span class="button a" data-name="button-1"></span> <!-- Croix -->
+            <span class="button b" data-name="button-2"></span> <!-- Rond -->
+            <span class="button x" data-name="button-3"></span> <!-- Carré -->
+            <span class="button y" data-name="button-4"></span> <!-- Triangle -->
         </div>
         <!-- Les autres boutons de la manette restent inchangés -->
         <div id="buttonCross" class="button">X</div>
@@ -173,6 +173,7 @@
                 "dpad-up", "dpad-down", "dpad-left", "dpad-right", "buttonTouchpad"
             ];
 
+            // Associer les boutons de la manette aux boutons affichés à l'écran
             buttonMap.forEach((id, index) => {
                 if (document.getElementById(id)) {
                     document.getElementById(id).classList.toggle("pressed", gp.buttons[index]?.pressed);
