@@ -11,13 +11,13 @@
             width: 806px;
             height: 598px;
             margin: 50px auto;
-            background: url(PS4_CONTROLLER/Akatsuki/manette.png) no-repeat center;
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/manette.png) no-repeat center;
             background-size: cover;
         }
 
         /* Style de déconnexion */
         .ds4.disconnected {
-            background: url(PS4_CONTROLLER/disconnected.png) no-repeat center;
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/disconnected.png) no-repeat center;
             background-size: cover;
         }
 
@@ -60,11 +60,26 @@
         .ds4 .x {
             background-position: -113px 0;
             top: 58px;
+            left: 0px; /* Positionnement ajusté */
         }
 
         .ds4 .y {
             background-position: 55px 0;
             left: 58px;
+        }
+
+        .ds4 .touchpad {
+            width: 265px;
+            height: 152px;
+            position: absolute;
+            left: 272px;
+            top: 123px;
+            background: none; /* Par défaut, il n'y a pas de fond */
+        }
+
+        .ds4 .touchpad.pressed {
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/pad.png) no-repeat center;
+            background-size: cover;
         }
 
         .button, .trigger {
@@ -81,7 +96,7 @@
         .trigger {
             width: 99px;
             height: 100px;
-            background: url(PS4_CONTROLLER/Akatsuki/tricker.png) no-repeat center;
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/tricker.png) no-repeat center;
             background-size: contain;
             opacity: 0;
         }
@@ -106,7 +121,6 @@
         #dpad-down { left: 110px; top: 300px; }
         #dpad-left { left: 70px; top: 270px; }
         #dpad-right { left: 150px; top: 270px; }
-        #buttonCross { right: 110px; top: 300px; }
         #buttonCircle { right: 150px; top: 270px; }
         #buttonSquare { right: 70px; top: 270px; }
         #buttonTriangle { right: 110px; top: 240px; }
@@ -133,7 +147,6 @@
             <span class="button y" data-name="button-4"></span> <!-- Triangle -->
         </div>
         <!-- Les autres boutons de la manette restent inchangés -->
-        <div id="buttonCross" class="button">X</div>
         <div id="dpad-up" class="button">▲</div>
         <div id="dpad-down" class="button">▼</div>
         <div id="dpad-left" class="button">◀</div>
@@ -150,6 +163,9 @@
         <div id="buttonR3" class="button">R3</div>
         <div id="leftStick" class="stick"></div>
         <div id="rightStick" class="stick"></div>
+
+        <!-- Zone du touchpad -->
+        <div class="touchpad"></div>
     </div>
 
     <script>
@@ -181,6 +197,10 @@
                     buttonElement.classList.toggle("pressed", gp.buttons[buttonMap[button]]?.pressed);
                 }
             });
+
+            // Mise à jour pour le touchpad
+            const touchpad = document.querySelector('.ds4 .touchpad');
+            touchpad.classList.toggle("pressed", gp.buttons[5]?.pressed); // Le touchpad est sur le bouton 5
 
             // Mise à jour pour les gâchettes
             document.getElementById("buttonL2").classList.toggle("pressed", gp.buttons[6]?.pressed);
