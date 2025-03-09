@@ -200,9 +200,9 @@
                 }
             });
 
-            // Mise à jour pour le touchpad : vérifier le bouton spécifique pour le touchpad (généralement index 9)
+            // Mise à jour pour le touchpad : vérifier le bouton spécifique pour le touchpad (index 17)
             const touchpad = document.querySelector('.ds4 .touchpad');
-            touchpad.classList.toggle("pressed", gp.buttons[9]?.pressed); // Utilisation de l'index 9 pour le touchpad
+            touchpad.classList.toggle("pressed", gp.buttons[17]?.pressed); // Utilisation de l'index 17 pour le touchpad
 
             // Mise à jour pour les gâchettes
             document.getElementById("buttonL2").classList.toggle("pressed", gp.buttons[6]?.pressed);
