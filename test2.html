@@ -153,10 +153,6 @@
         #buttonCircle { right: 150px; top: 270px; }
         #buttonSquare { right: 70px; top: 270px; }
         #buttonTriangle { right: 110px; top: 240px; }
-        #buttonL1 { left: 200px; top: 50px; }
-        #buttonR1 { right: 200px; top: 50px; }
-        #buttonL2 { left: 200px; top: 10px; }
-        #buttonR2 { right: 200px; top: 10px; }
         #buttonShare { left: 300px; top: 120px; }
         #buttonOptions { right: 300px; top: 120px; }
         #buttonPS { left: 380px; bottom: 60px; }
@@ -190,17 +186,11 @@
         <div id="dpad-down" class="button">▼</div>
         <div id="dpad-left" class="button">◀</div>
         <div id="dpad-right" class="button">▶</div>
-        <div id="buttonL1" class="button">L1</div>
-        <div id="buttonR1" class="button">R1</div>
-        <div id="buttonL2" class="trigger"></div>
-        <div id="buttonR2" class="trigger"></div>
         <div id="buttonShare" class="button">SH</div>
         <div id="buttonOptions" class="button">OP</div>
         <div id="buttonPS" class="button">PS</div>
         <div id="buttonL3" class="button">L3</div>
         <div id="buttonR3" class="button">R3</div>
-        <div id="leftStick" class="stick"></div>
-        <div id="rightStick" class="stick"></div>
     </div>
 
     <script>
@@ -242,10 +232,6 @@
             const rightBumper = document.querySelector('.ds4 .bumper.right');
             leftBumper.classList.toggle("pressed", gp.buttons[4]?.pressed); // L1
             rightBumper.classList.toggle("pressed", gp.buttons[5]?.pressed); // R1
-
-            // Mise à jour pour les gâchettes
-            document.getElementById("buttonL2").classList.toggle("pressed", gp.buttons[6]?.pressed);
-            document.getElementById("buttonR2").classList.toggle("pressed", gp.buttons[7]?.pressed);
 
             document.getElementById("leftStick").style.transform = `translate(${gp.axes[0] * 10}px, ${gp.axes[1] * 10}px)`;
             document.getElementById("rightStick").style.transform = `translate(${gp.axes[2] * 10}px, ${gp.axes[3] * 10}px)`;
