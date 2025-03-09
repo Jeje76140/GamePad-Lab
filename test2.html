@@ -8,8 +8,8 @@
         body { font-family: Arial, sans-serif; text-align: center; background-color: #282c34; color: white; }
         .controller {
             position: relative;
-            width: 400px;
-            height: 250px;
+            width: 500px;
+            height: 300px;
             margin: 50px auto;
             background: #444;
             border-radius: 20px;
@@ -29,7 +29,6 @@
             font-weight: bold;
         }
         .pressed { background: red; color: white; }
-        
         .stick {
             position: absolute;
             width: 40px;
@@ -38,9 +37,26 @@
             border-radius: 50%;
             transition: transform 0.1s linear;
         }
-        #leftStick { left: 80px; bottom: 60px; }
-        #rightStick { right: 80px; bottom: 60px; }
-        
+        #leftStick { left: 80px; bottom: 80px; }
+        #rightStick { right: 80px; bottom: 80px; }
+        #dpad-up { left: 50px; top: 100px; }
+        #dpad-down { left: 50px; top: 160px; }
+        #dpad-left { left: 20px; top: 130px; }
+        #dpad-right { left: 80px; top: 130px; }
+        #buttonCross { right: 50px; top: 160px; }
+        #buttonCircle { right: 80px; top: 130px; }
+        #buttonSquare { right: 20px; top: 130px; }
+        #buttonTriangle { right: 50px; top: 100px; }
+        #buttonL1 { left: 120px; top: 20px; }
+        #buttonR1 { right: 120px; top: 20px; }
+        #buttonL2 { left: 120px; top: -20px; }
+        #buttonR2 { right: 120px; top: -20px; }
+        #buttonShare { left: 180px; top: 50px; }
+        #buttonOptions { right: 180px; top: 50px; }
+        #buttonPS { left: 230px; bottom: 30px; }
+        #buttonTouchpad { left: 200px; top: 80px; width: 100px; height: 50px; border-radius: 10px; }
+        #buttonL3 { left: 80px; bottom: 60px; }
+        #buttonR3 { right: 80px; bottom: 60px; }
     </style>
 </head>
 <body>
@@ -50,6 +66,10 @@
         <div id="buttonCircle" class="button">O</div>
         <div id="buttonSquare" class="button">□</div>
         <div id="buttonTriangle" class="button">△</div>
+        <div id="dpad-up" class="button">▲</div>
+        <div id="dpad-down" class="button">▼</div>
+        <div id="dpad-left" class="button">◀</div>
+        <div id="dpad-right" class="button">▶</div>
         <div id="buttonL1" class="button">L1</div>
         <div id="buttonR1" class="button">R1</div>
         <div id="buttonL2" class="button">L2</div>
@@ -60,44 +80,33 @@
         <div id="buttonTouchpad" class="button">TP</div>
         <div id="buttonL3" class="button">L3</div>
         <div id="buttonR3" class="button">R3</div>
-        
         <div id="leftStick" class="stick"></div>
         <div id="rightStick" class="stick"></div>
     </div>
-    
     <script>
-        window.addEventListener("gamepadconnected", (event) => {
-            console.log("Manette connectée :", event.gamepad.id);
+        window.addEventListener("gamepadconnected", () => {
             updateGamepad();
         });
 
         function updateGamepad() {
-            const gamepads = navigator.getGamepads();
-            const gp = gamepads[0];
+            const gp = navigator.getGamepads()[0];
             if (!gp) return;
             
-            // Boutons
-            document.getElementById("buttonCross").classList.toggle("pressed", gp.buttons[0].pressed);
-            document.getElementById("buttonCircle").classList.toggle("pressed", gp.buttons[1].pressed);
-            document.getElementById("buttonSquare").classList.toggle("pressed", gp.buttons[2].pressed);
-            document.getElementById("buttonTriangle").classList.toggle("pressed", gp.buttons[3].pressed);
-            document.getElementById("buttonL1").classList.toggle("pressed", gp.buttons[4].pressed);
-            document.getElementById("buttonR1").classList.toggle("pressed", gp.buttons[5].pressed);
-            document.getElementById("buttonL2").classList.toggle("pressed", gp.buttons[6].pressed);
-            document.getElementById("buttonR2").classList.toggle("pressed", gp.buttons[7].pressed);
-            document.getElementById("buttonShare").classList.toggle("pressed", gp.buttons[8].pressed);
-            document.getElementById("buttonOptions").classList.toggle("pressed", gp.buttons[9].pressed);
-            document.getElementById("buttonPS").classList.toggle("pressed", gp.buttons[10].pressed);
-            document.getElementById("buttonTouchpad").classList.toggle("pressed", gp.buttons[17]?.pressed);
-            document.getElementById("buttonL3").classList.toggle("pressed", gp.buttons[11].pressed);
-            document.getElementById("buttonR3").classList.toggle("pressed", gp.buttons[12].pressed);
+            const buttonMap = [
+                "buttonCross", "buttonCircle", "buttonSquare", "buttonTriangle",
+                "buttonL1", "buttonR1", "buttonL2", "buttonR2",
+                "buttonShare", "buttonOptions", "buttonPS", "buttonL3", "buttonR3",
+                "dpad-up", "dpad-down", "dpad-left", "dpad-right", "buttonTouchpad"
+            ];
             
-            // Mouvements des sticks
-            const leftStick = document.getElementById("leftStick");
-            const rightStick = document.getElementById("rightStick");
+            buttonMap.forEach((id, index) => {
+                if (document.getElementById(id)) {
+                    document.getElementById(id).classList.toggle("pressed", gp.buttons[index]?.pressed);
+                }
+            });
             
-            leftStick.style.transform = `translate(${gp.axes[0] * 10}px, ${gp.axes[1] * 10}px)`;
-            rightStick.style.transform = `translate(${gp.axes[2] * 10}px, ${gp.axes[3] * 10}px)`;
+            document.getElementById("leftStick").style.transform = `translate(${gp.axes[0] * 10}px, ${gp.axes[1] * 10}px)`;
+            document.getElementById("rightStick").style.transform = `translate(${gp.axes[2] * 10}px, ${gp.axes[3] * 10}px)`;
             
             requestAnimationFrame(updateGamepad);
         }
