@@ -11,7 +11,7 @@
             width: 806px;
             height: 598px;
             margin: 50px auto;
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/manette.png) no-repeat center;
+            background: url(PS4_CONTROLLER/Akatsuki/manette.png) no-repeat center;
             background-size: cover;
         }
         .button, .trigger {
@@ -27,9 +27,12 @@
         .trigger {
             width: 99px;
             height: 100px;
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/tricker.png) no-repeat center;
+            background: url(PS4_CONTROLLER/Akatsuki/tricker.png) no-repeat center;
             background-size: contain;
             opacity: 0;
+        }
+        .trigger.pressed {
+            opacity: 1;
         }
         .pressed { background: red; color: white; opacity: 1; }
         .stick {
@@ -94,23 +97,27 @@
         function updateGamepad() {
             const gp = navigator.getGamepads()[0];
             if (!gp) return;
-            
+
             const buttonMap = [
                 "buttonCross", "buttonCircle", "buttonSquare", "buttonTriangle",
                 "buttonL1", "buttonR1", "buttonL2", "buttonR2",
                 "buttonShare", "buttonOptions", "buttonPS", "buttonL3", "buttonR3",
                 "dpad-up", "dpad-down", "dpad-left", "dpad-right", "buttonTouchpad"
             ];
-            
+
             buttonMap.forEach((id, index) => {
                 if (document.getElementById(id)) {
                     document.getElementById(id).classList.toggle("pressed", gp.buttons[index]?.pressed);
                 }
             });
-            
+
+            // Pour les gâchettes, on vérifie si elles sont pressées et on change l'opacité
+            document.getElementById("buttonL2").classList.toggle("pressed", gp.buttons[6]?.pressed);
+            document.getElementById("buttonR2").classList.toggle("pressed", gp.buttons[7]?.pressed);
+
             document.getElementById("leftStick").style.transform = `translate(${gp.axes[0] * 10}px, ${gp.axes[1] * 10}px)`;
             document.getElementById("rightStick").style.transform = `translate(${gp.axes[2] * 10}px, ${gp.axes[3] * 10}px)`;
-            
+
             requestAnimationFrame(updateGamepad);
         }
     </script>
