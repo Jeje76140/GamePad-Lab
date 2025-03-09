@@ -17,7 +17,7 @@
 
         /* Style de déconnexion */
         .ds4.disconnected {
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/disconnected.png) no-repeat center;
+            background: url(PS4_CONTROLLER/disconnected.png) no-repeat center;
             background-size: cover;
         }
 
@@ -38,7 +38,7 @@
             position: absolute;
             width: 55px;
             height: 55px;
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/button.png);
+            background: url(PS4_CONTROLLER/Akatsuki/button.png);
         }
 
         .ds4 .button.pressed {
@@ -166,21 +166,23 @@
             const gp = navigator.getGamepads()[0];
             if (!gp) return;
 
-            const buttonMap = [
-                "buttonCross", "buttonCircle", "buttonSquare", "buttonTriangle",
-                "buttonL1", "buttonR1", "buttonL2", "buttonR2",
-                "buttonShare", "buttonOptions", "buttonPS", "buttonL3", "buttonR3",
-                "dpad-up", "dpad-down", "dpad-left", "dpad-right", "buttonTouchpad"
-            ];
+            // Associer les boutons A, B, X, Y avec les boutons de la manette PS5
+            const buttonMap = {
+                "a": 0, // Croix
+                "b": 1, // Rond
+                "x": 2, // Carré
+                "y": 3, // Triangle
+            };
 
-            // Associer les boutons de la manette aux boutons affichés à l'écran
-            buttonMap.forEach((id, index) => {
-                if (document.getElementById(id)) {
-                    document.getElementById(id).classList.toggle("pressed", gp.buttons[index]?.pressed);
+            // Met à jour les classes des boutons A, B, X, Y
+            Object.keys(buttonMap).forEach(button => {
+                const buttonElement = document.querySelector(`.ds4 .${button}`);
+                if (buttonElement) {
+                    buttonElement.classList.toggle("pressed", gp.buttons[buttonMap[button]]?.pressed);
                 }
             });
 
-            // Pour les gâchettes, on vérifie si elles sont pressées et on change l'opacité
+            // Mise à jour pour les gâchettes
             document.getElementById("buttonL2").classList.toggle("pressed", gp.buttons[6]?.pressed);
             document.getElementById("buttonR2").classList.toggle("pressed", gp.buttons[7]?.pressed);
 
