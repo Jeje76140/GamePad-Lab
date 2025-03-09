@@ -138,14 +138,19 @@
 </head>
 <body>
     <h1>Afficheur Manette PS5</h1>
+
     <div class="controller ds4">
+        <!-- Regroupement des boutons Crois, Rond, Carré et Triangle -->
         <div class="abxy">
-            <!-- Regroupement des boutons Croix, Rond, Carré et Triangle -->
             <span class="button a" data-name="button-1"></span> <!-- Croix -->
             <span class="button b" data-name="button-2"></span> <!-- Rond -->
             <span class="button x" data-name="button-3"></span> <!-- Carré -->
             <span class="button y" data-name="button-4"></span> <!-- Triangle -->
         </div>
+
+        <!-- Zone du touchpad -->
+        <div class="touchpad" data-name="touch-pad"></div>
+
         <!-- Les autres boutons de la manette restent inchangés -->
         <div id="dpad-up" class="button">▲</div>
         <div id="dpad-down" class="button">▼</div>
@@ -163,9 +168,6 @@
         <div id="buttonR3" class="button">R3</div>
         <div id="leftStick" class="stick"></div>
         <div id="rightStick" class="stick"></div>
-
-        <!-- Zone du touchpad -->
-        <div class="touchpad"></div>
     </div>
 
     <script>
@@ -198,9 +200,9 @@
                 }
             });
 
-            // Mise à jour pour le touchpad
+            // Mise à jour pour le touchpad : vérifier le bouton spécifique pour le touchpad (généralement index 13)
             const touchpad = document.querySelector('.ds4 .touchpad');
-            touchpad.classList.toggle("pressed", gp.buttons[5]?.pressed); // Le touchpad est sur le bouton 5
+            touchpad.classList.toggle("pressed", gp.buttons[13]?.pressed); // Le touchpad est sur le bouton 13
 
             // Mise à jour pour les gâchettes
             document.getElementById("buttonL2").classList.toggle("pressed", gp.buttons[6]?.pressed);
