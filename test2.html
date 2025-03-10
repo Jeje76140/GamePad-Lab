@@ -219,40 +219,24 @@
     </div>
 
     <script>
-        // Code lié aux autres boutons, excluant les sticks
-        document.querySelectorAll('.button').forEach(button => {
-            button.addEventListener('click', () => {
-                button.classList.toggle('pressed');
-            });
-        });
+        // Fonction pour vérifier si la manette est connectée
+        function checkControllerConnection() {
+            // Si la manette est connectée (ici, on simule la connexion avec un flag)
+            var controllerConnected = true;  // Changez cette valeur selon l'état réel de la manette
 
-        document.querySelectorAll('.face').forEach(face => {
-            face.addEventListener('click', () => {
-                face.classList.toggle('pressed');
-            });
-        });
+            var controllerElement = document.querySelector('.controller');
 
-        document.querySelectorAll('.bumper').forEach(bumper => {
-            bumper.addEventListener('click', () => {
-                bumper.classList.toggle('pressed');
-            });
-        });
+            if (!controllerConnected) {
+                // Si la manette n'est pas connectée, ajoutez la classe .disconnected et cachez la manette
+                controllerElement.classList.add('disconnected');
+            } else {
+                // Si la manette est connectée, retirez la classe .disconnected
+                controllerElement.classList.remove('disconnected');
+            }
+        }
 
-        document.querySelectorAll('.trigger').forEach(trigger => {
-            trigger.addEventListener('click', () => {
-                trigger.classList.toggle('pressed');
-            });
-        });
-
-        document.querySelectorAll('.back, .start').forEach(button => {
-            button.addEventListener('click', () => {
-                button.classList.toggle('pressed');
-            });
-        });
-
-        document.querySelector('.touchpad').addEventListener('click', () => {
-            document.querySelector('.touchpad').classList.toggle('pressed');
-        });
+        // Appeler la fonction pour vérifier l'état de la connexion
+        checkControllerConnection();
     </script>
 </body>
 </html>
