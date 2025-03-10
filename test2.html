@@ -305,8 +305,8 @@
                     stickElement.style.marginTop = `${y}px`;
 
                     // Update transform for rotation effect
-                    const rotateX = x * 0.5; // Convert the movement to a degree rotation range
-                    const rotateY = y * 0.5; // Convert the movement to a degree rotation range
+                    const rotateX = x * 1; // Multiplied by 1 for full movement range
+                    const rotateY = y * 1; // Multiplied by 1 for full movement range
                     stickElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                 }
             });
