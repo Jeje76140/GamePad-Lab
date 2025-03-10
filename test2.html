@@ -180,40 +180,6 @@
         .ds4 .trigger.pressed {
             opacity: 1;
         }
-
-        /* Joysticks */
-        .ds4 .sticks {
-            position: absolute;
-            width: 361px;
-            height: 105px;
-            top: 311px;
-            left: 227px;
-        }
-
-        .ds4 .stick {
-            position: absolute;
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/stick.png);
-            height: 94px;
-            width: 94px;
-        }
-
-        .ds4 .stick.pressed.left {
-            background-position-x: -96px;
-        }
-
-        .ds4 .stick.pressed.right {
-            background-position-x: -192px;
-        }
-
-        .ds4 .stick.left {
-            top: 0;
-            left: 0;
-        }
-
-        .ds4 .stick.right {
-            top: calc(100% - 105px);
-            left: calc(100% - 102px);
-        }
     </style>
 </head>
 <body>
@@ -250,67 +216,43 @@
             <span class="trigger left" data-name="button-l2"></span>
             <span class="trigger right" data-name="button-r2"></span>
         </div>
-
-        <div class="sticks">
-            <span class="stick left" data-name="stick-1"></span>
-            <span class="stick right" data-name="stick-2"></span>
-        </div>
     </div>
 
     <script>
-        // Fonction pour la gestion des sticks et normalisation des axes
-        function fixAxes(stickObj) {
-            var startValue = +stickObj.axesConfig.lowValue;
-            var endValue = +stickObj.axesConfig.highValue;
+        // Code lié aux autres boutons, excluant les sticks
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', () => {
+                button.classList.toggle('pressed');
+            });
+        });
 
-            var isFlipped = (endValue < startValue);
+        document.querySelectorAll('.face').forEach(face => {
+            face.addEventListener('click', () => {
+                face.classList.toggle('pressed');
+            });
+        });
 
-            if (isFlipped) {
-                var temp = startValue;
-                startValue = endValue;
-                endValue = temp;
-            }
+        document.querySelectorAll('.bumper').forEach(bumper => {
+            bumper.addEventListener('click', () => {
+                bumper.classList.toggle('pressed');
+            });
+        });
 
-            var zeroOffset = startValue * -1;
-            var axisVal = choiceValue(stickObj);
+        document.querySelectorAll('.trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                trigger.classList.toggle('pressed');
+            });
+        });
 
-            // En ajoutant le décalage à la valeur actuelle et à la valeur de fin, nous pouvons normaliser l'entrée
-            var newValue = (axisVal + zeroOffset) / (endValue + zeroOffset);
+        document.querySelectorAll('.back, .start').forEach(button => {
+            button.addEventListener('click', () => {
+                button.classList.toggle('pressed');
+            });
+        });
 
-            // Dans le cas où les valeurs de départ et de fin sont échangées, nous prenons en compte cette inversion
-            newValue = (isFlipped) ? (1 - newValue) : newValue;
-
-            switch (stickObj.axesConfig.type) {
-                case "trigger":
-                    break;
-                case "stick":
-                    newValue = (-1 + (newValue * 2)); // Normalisation spécifique pour le stick
-                    break;
-                default:
-                    setMapping(stickObj, {});
-                    return;
-            }
-            setMapping(stickObj, newValue);
-        }
-
-        function setMapping(stickObj, setValue) {
-            switch (typeof setValue) {
-                case "number":
-                    if (stickObj.targetType == "axes") {
-                        remapObj[stickObj.targetType][stickObj.target] = setValue;
-                    } else {
-                        remapObj[stickObj.targetType][stickObj.target].value = setValue;
-                    }
-                    break;
-                case "object":
-                    if (stickObj.targetType == "axes") {
-                        remapObj[stickObj.targetType][stickObj.target] = makeAxis(stickToButton(stickObj.positive), stickToButton(stickObj.negative));
-                    } else {
-                        remapObj[stickObj.targetType][stickObj.target].value = stickToButton(stickObj);
-                    }
-                    break;
-            }
-        }
+        document.querySelector('.touchpad').addEventListener('click', () => {
+            document.querySelector('.touchpad').classList.toggle('pressed');
+        });
     </script>
 </body>
 </html>
