@@ -278,7 +278,7 @@
                 "button-cross": 0, "button-circle": 1, "button-square": 2, "button-triangle": 3,
                 "button-l1": 4, "button-r1": 5, "button-l2": 6, "button-r2": 7,
                 "button-dpad-top": 12, "button-dpad-bottom": 13, "button-dpad-left": 14, "button-dpad-right": 15,
-                "button-share": 8, "button-options": 9, "touch-pad": 17
+                "button-share": 8, "button-options": 9, "touch-pad": 17  // Touchpad remapped to 17
             };
 
             // Boutons
@@ -306,21 +306,12 @@
                     let x = gp.axes[axisX] * 22; // Multiplied to get a reasonable range between -22 and 22
                     let y = gp.axes[axisY] * 22; // Multiplied to get a reasonable range between -22 and 22
 
-                    // Inverser la direction
-                    x = -x;
-                    y = -y;
-
-                    // Mettre à jour la transformation pour l'effet de rotation
-                    let rotateX = x * 1; // Multiplied by 1 for full movement range
-                    let rotateY = y * 1; // Multiplied by 1 for full movement range
-
-                    // Ajuster rotateY pour le stick gauche
-                    if (stick === "stick-1" && x < 0) {
-                        rotateY = -22;
-                    }
-
                     stickElement.style.marginLeft = `${x}px`;
                     stickElement.style.marginTop = `${y}px`;
+
+                    // Mettre à jour la transformation pour l'effet de rotation
+                    const rotateX = x * 1; // Multiplied by 1 for full movement range
+                    const rotateY = y * 1; // Multiplied by 1 for full movement range
                     stickElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                 }
             });
