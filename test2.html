@@ -306,7 +306,7 @@
                     stickElement.style.marginTop = `${-x}px`; // Normal: X moves up-down
 
                     // Update transform for rotation effect (inverted only for transform)
-                    const rotateX = x; // X controls Y (up-down)
+                    const rotateX = -x; // Inverted X for rotation (this controls the up-down effect)
                     const rotateY = y; // Y controls X (left-right)
                     stickElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                 }
