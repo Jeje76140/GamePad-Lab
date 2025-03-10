@@ -301,13 +301,13 @@
                     const x = gp.axes[axisX] * 22; // Multiplied to get a reasonable range between -22 and 22
                     const y = gp.axes[axisY] * 22; // Multiplied to get a reasonable range between -22 and 22
 
-                    // Inverser les marges
-                    stickElement.style.marginLeft = `${-y}px`; // Inversé pour que le joystick se déplace à gauche quand X est négatif
-                    stickElement.style.marginTop = `${-x}px`; // Inversé pour que le joystick se déplace en bas quand Y est positif
+                    // Update margins (normal movement)
+                    stickElement.style.marginLeft = `${y}px`; // Normal: Y moves left-right
+                    stickElement.style.marginTop = `${-x}px`; // Normal: X moves up-down
 
-                    // Update transform for rotation effect (Inverted X and Y only for transform)
-                    const rotateX = x * -1; // Inversé - X contrôle Y (haut-bas)
-                    const rotateY = y * -1; // Inversé - Y contrôle X (gauche-droite)
+                    // Update transform for rotation effect (inverted only for transform)
+                    const rotateX = x; // X controls Y (up-down)
+                    const rotateY = y; // Y controls X (left-right)
                     stickElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                 }
             });
