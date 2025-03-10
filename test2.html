@@ -72,6 +72,28 @@
         .ds4 .bumper.left { float: left; }
         .ds4 .bumper.right { float: right; position: absolute; left: 492px; transform: rotateY(180deg); }
 
+        /* Triggers */
+        .ds4 .triggers {
+            width: 588px;
+            height: 90px;
+            position: absolute;
+            left: 109px;
+        }
+
+        .ds4 .trigger {
+            width: 99px;
+            height: 100%;
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/tricker.png);
+            opacity: 0;
+        }
+
+        .ds4 .trigger.pressed {
+            opacity: 1;
+        }
+
+        .ds4 .trigger.left { float: left; }
+        .ds4 .trigger.right { float: right; background-position-x: 99px; }
+
         /* Flèches directionnelles */
         .ds4 .dpad {
             position: absolute;
@@ -169,6 +191,11 @@
             <span class="bumper right" data-name="button-r1"></span>
         </div>
 
+        <div class="triggers">
+            <span class="trigger left" data-name="button-l2"></span>
+            <span class="trigger right" data-name="button-r2"></span>
+        </div>
+
         <div class="dpad">
             <span class="face up" data-name="button-dpad-top"></span>
             <span class="face down" data-name="button-dpad-bottom"></span>
@@ -183,37 +210,5 @@
 
         <div class="touchpad" data-name="touch-pad"></div>
     </div>
-
-    <script>
-        window.addEventListener("gamepadconnected", () => {
-            document.querySelector(".ds4").classList.remove("disconnected");
-            updateGamepad();
-        });
-
-        window.addEventListener("gamepaddisconnected", () => {
-            document.querySelector(".ds4").classList.add("disconnected");
-        });
-
-        function updateGamepad() {
-            const gp = navigator.getGamepads()[0];
-            if (!gp) return;
-
-            const buttonMap = {
-                "button-cross": 0, "button-circle": 1, "button-square": 2, "button-triangle": 3,
-                "button-l1": 4, "button-r1": 5, "button-share": 8, "button-options": 9,
-                "button-dpad-top": 12, "button-dpad-bottom": 13, "button-dpad-left": 14,
-                "button-dpad-right": 15, "touch-pad": 17
-            };
-
-            Object.keys(buttonMap).forEach(button => {
-                const buttonElement = document.querySelector(`[data-name="${button}"]`);
-                if (buttonElement) {
-                    buttonElement.classList.toggle("pressed", gp.buttons[buttonMap[button]]?.pressed);
-                }
-            });
-
-            requestAnimationFrame(updateGamepad);
-        }
-    </script>
 </body>
 </html>
