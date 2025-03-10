@@ -301,8 +301,8 @@
                     const x = gp.axes[axisX] * 22; // Multiplied to get a reasonable range between -22 and 22
                     const y = gp.axes[axisY] * 22; // Multiplied to get a reasonable range between -22 and 22
 
-                    stickElement.style.marginLeft = `${x}px`;
-                    stickElement.style.marginTop = `${y}px`;
+                    stickElement.style.marginLeft = `${y}px`; // Inverted - Y controls X axis (left-right)
+                    stickElement.style.marginTop = `${x}px`; // Inverted - X controls Y axis (up-down)
 
                     // Update transform for rotation effect
                     const rotateX = x * 1; // Multiplied by 1 for full movement range
