@@ -153,6 +153,35 @@
             transform: rotateY(180deg);
             background-position: 27px 0;
         }
+
+        /* Triggers */
+        .ds4 .triggers {
+            width: 588px;
+            height: 90px;
+            position: absolute;
+            left: 109px;
+            top: 400px;
+        }
+
+        .ds4 .trigger {
+            width: 99px;
+            height: 100%;
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/tricker.png);
+            opacity: 0;
+        }
+
+        .ds4 .trigger.left {
+            float: left;
+        }
+
+        .ds4 .trigger.right {
+            float: right;
+            background-position-x: 99px;
+        }
+
+        .ds4 .trigger.pressed {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -184,6 +213,11 @@
         </div>
 
         <div class="touchpad" data-name="touch-pad"></div>
+
+        <div class="triggers">
+            <span class="trigger left" data-name="button-l2"></span>
+            <span class="trigger right" data-name="button-r2"></span>
+        </div>
     </div>
 
     <script>
@@ -204,13 +238,25 @@
                 "button-cross": 0, "button-circle": 1, "button-square": 2, "button-triangle": 3,
                 "button-l1": 4, "button-r1": 5, "button-share": 8, "button-options": 9,
                 "button-dpad-top": 12, "button-dpad-bottom": 13, "button-dpad-left": 14,
-                "button-dpad-right": 15, "touch-pad": 17
+                "button-dpad-right": 15, "touch-pad": 17, "button-l2": 6, "button-r2": 7
             };
 
             Object.keys(buttonMap).forEach(button => {
                 const buttonElement = document.querySelector(`[data-name="${button}"]`);
                 if (buttonElement) {
                     buttonElement.classList.toggle("pressed", gp.buttons[buttonMap[button]]?.pressed);
+                }
+            });
+
+            // Triggers (L2, R2)
+            const triggerMap = {
+                "button-l2": 6, "button-r2": 7
+            };
+
+            Object.keys(triggerMap).forEach(trigger => {
+                const triggerElement = document.querySelector(`[data-name="${trigger}"]`);
+                if (triggerElement) {
+                    triggerElement.classList.toggle("pressed", gp.buttons[triggerMap[trigger]]?.pressed);
                 }
             });
 
