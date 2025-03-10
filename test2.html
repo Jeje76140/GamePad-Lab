@@ -181,7 +181,7 @@
             opacity: 1;
         }
 
-        /* Joysticks */
+        /* Joysticks (réinitialisation) */
         .ds4 .sticks {
             position: absolute;
             width: 361px;
@@ -195,9 +195,6 @@
             background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/stick.png);
             height: 94px;
             width: 94px;
-            margin-left: 0px;
-            margin-top: 0px;
-            transform: rotateX(0deg) rotateY(0deg);
         }
 
         .ds4 .stick.pressed.left {
@@ -255,8 +252,8 @@
         </div>
 
         <div class="sticks">
-            <span class="stick left" data-name="stick-1" style="margin-left: 0px; margin-top: 0px; transform: rotateX(0deg) rotateY(0deg);"></span>
-            <span class="stick right" data-name="stick-2" style="margin-left: 0px; margin-top: 0px; transform: rotateX(0deg) rotateY(0deg);"></span>
+            <span class="stick left" data-name="stick-1"></span>
+            <span class="stick right" data-name="stick-2"></span>
         </div>
     </div>
 
@@ -288,7 +285,7 @@
                 }
             });
 
-            // Joysticks (L3, R3)
+            // Joysticks (L3, R3) - Rétablissement du comportement initial
             const stickMap = {
                 "stick-1": { axisX: 0, axisY: 1 },
                 "stick-2": { axisX: 2, axisY: 3 }
@@ -303,12 +300,7 @@
 
                     // Update margins (normal movement)
                     stickElement.style.marginLeft = `${y}px`; // Normal: Y moves left-right
-                    stickElement.style.marginTop = `${x}px`; // Normal: X moves up-down
-
-                    // Update transform for rotation effect (inverted only for transform)
-                    const rotateX = -x; // Inverted X for rotation (this controls the up-down effect)
-                    const rotateY = y; // Y controls X (left-right)
-                    stickElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    stickElement.style.marginTop = `${-x}px`; // Normal: X moves up-down
                 }
             });
 
