@@ -115,13 +115,48 @@
         .ds4 .touchpad.pressed {
             background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/pad.png) no-repeat center;
         }
+
+        /* Share (Back) & Options (Start) */
+        .ds4 .arrows {
+            position: absolute;
+            width: 352px;
+            height: 46px;
+            top: 142px;
+            left: 227px;
+        }
+
+        .ds4 .back, .ds4 .start {
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/start-select.png);
+            width: 27px;
+            height: 47px;
+            opacity: 0;
+        }
+
+        .ds4 .back.pressed, .ds4 .start.pressed {
+            opacity: 1;
+        }
+
+        .ds4 .back {
+            float: left;
+            position: absolute;
+            left: -3px;
+            top: -3px;
+        }
+
+        .ds4 .start {
+            float: right;
+            position: absolute;
+            left: 330px;
+            top: -3px;
+            transform: rotateY(180deg);
+            background-position: 27px 0;
+        }
     </style>
 </head>
 <body>
     <h1>Afficheur Manette PS5</h1>
 
     <div class="controller ds4">
-        <!-- Boutons ABXY -->
         <div class="abxy">
             <span class="button a" data-name="button-cross"></span>
             <span class="button b" data-name="button-circle"></span>
@@ -129,13 +164,11 @@
             <span class="button y" data-name="button-triangle"></span>
         </div>
 
-        <!-- Bumpers -->
         <div class="bumpers">
             <span class="bumper left" data-name="button-l1"></span>
             <span class="bumper right" data-name="button-r1"></span>
         </div>
 
-        <!-- Flèches directionnelles -->
         <div class="dpad">
             <span class="face up" data-name="button-dpad-top"></span>
             <span class="face down" data-name="button-dpad-bottom"></span>
@@ -143,7 +176,11 @@
             <span class="face right" data-name="button-dpad-right"></span>
         </div>
 
-        <!-- Touchpad -->
+        <div class="arrows">
+            <span class="back" data-name="button-share"></span>
+            <span class="start" data-name="button-options"></span>
+        </div>
+
         <div class="touchpad" data-name="touch-pad"></div>
     </div>
 
@@ -163,8 +200,9 @@
 
             const buttonMap = {
                 "button-cross": 0, "button-circle": 1, "button-square": 2, "button-triangle": 3,
-                "button-l1": 4, "button-r1": 5, "button-dpad-top": 12, "button-dpad-bottom": 13,
-                "button-dpad-left": 14, "button-dpad-right": 15, "touch-pad": 17
+                "button-l1": 4, "button-r1": 5, "button-share": 8, "button-options": 9,
+                "button-dpad-top": 12, "button-dpad-bottom": 13, "button-dpad-left": 14,
+                "button-dpad-right": 15, "touch-pad": 17
             };
 
             Object.keys(buttonMap).forEach(button => {
