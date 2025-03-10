@@ -10,27 +10,32 @@
         .ds4.disconnected { background: url("https://jeje76140.github.io/PS4_CONTROLLER/disconnected.png"); }
         .ds4.disconnected div { display: none; }
         .abxy, .bumpers, .triggers, .dpad, .share-options, .touchpad { position: absolute; }
-        
+
+        /* Cache les boutons par défaut */
+        .button, .bumper, .trigger, .face, .back, .start {
+            display: none;
+        }
+
         .abxy { width: 170px; height: 171px; top: 159px; left: 570px; }
         .button { position: absolute; width: 55px; height: 55px; background: url("https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/button.png"); }
-        .button.pressed { background-position-y: 55px; }
+        .button.pressed { display: block; background-position-y: 55px; }
         .a { background-position: 0 0; bottom: 0; left: 58px; }
         .b { background-position: -57px 0; top: 58px; right: 0px; }
         .x { background-position: -113px 0; top: 58px; left: 0px; }
         .y { background-position: 55px 0; left: 58px; }
-        
+
         .bumpers { width: 588px; height: 23px; left: 109px; top: 95px; }
         .bumper { width: 99px; height: 23px; background: url("https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/bumper.png") no-repeat; opacity: 0; }
-        .bumper.pressed { opacity: 1; }
+        .bumper.pressed { display: block; }
         .bumper.left { float: left; }
         .bumper.right { float: right; position: absolute; left: 492px; transform: rotateY(180deg); }
-        
+
         .triggers { width: 588px; height: 90px; left: 109px; }
         .trigger { width: 99px; height: 100%; background: url("https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/tricker.png"); opacity: 0; }
         .trigger.left { float: left; }
         .trigger.right { float: right; background-position-x: 99px; }
-        .trigger.pressed { opacity: 1; }
-        
+        .trigger.pressed { display: block; }
+
         .dpad { width: 126px; height: 126px; top: 189px; left: 82px; }
         .face { background: url("https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/arrows.png"); position: absolute; }
         .face.up { width: 52px; height: 63px; left: 44px; top: -14px; background-position: -52px 126px; }
@@ -38,13 +43,13 @@
         .face.left { width: 63px; height: 63px; top: 20px; left: 0px; background-position: -104px 126px; }
         .face.right { width: 63px; height: 63px; top: 18px; right: -14px; background-position: 63px 0; }
         .face.pressed { background-position-y: 63px; }
-        
+
         .share-options { width: 352px; height: 46px; top: 142px; left: 227px; }
         .back, .start { background: url("https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/start-select.png"); width: 27px; height: 47px; opacity: 0; }
-        .back.pressed, .start.pressed { opacity: 1; }
+        .back.pressed, .start.pressed { display: block; }
         .back { float: left; position: absolute; left: -3px; top: -3px; }
         .start { float: right; position: absolute; left: 330px; top: -3px; transform: rotateY(180deg); background-position: 27px 0; }
-        
+
         .touchpad { width: 265px; height: 152px; left: 272px; top: 123px; }
         .touchpad.pressed { background: url("https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/pad.png") no-repeat center; }
     </style>
@@ -94,7 +99,14 @@
             if (!gp) return;
             
             document.querySelectorAll("[data-name]").forEach(el => {
-                el.classList.toggle("pressed", gp.buttons[el.dataset.name.split("-")[1]]?.pressed);
+                const buttonIndex = el.dataset.name.split("-")[1];
+                if (gp.buttons[buttonIndex]) {
+                    const isPressed = gp.buttons[buttonIndex]?.pressed;
+                    el.classList.toggle("pressed", isPressed);
+                    if (isPressed) {
+                        el.style.display = "block";  // Affiche le bouton seulement quand il est pressé
+                    }
+                }
             });
             requestAnimationFrame(updateGamepad);
         }
