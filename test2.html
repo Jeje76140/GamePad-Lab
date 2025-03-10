@@ -274,6 +274,25 @@
             const gp = navigator.getGamepads()[0];
             if (!gp) return;
 
+            const buttonMap = {
+                "button-cross": 0, "button-circle": 1, "button-square": 2, "button-triangle": 3,
+                "button-l1": 4, "button-r1": 5, "button-l2": 6, "button-r2": 7,
+                "button-dpad-top": 12, "button-dpad-bottom": 13, "button-dpad-left": 14, "button-dpad-right": 15,
+                "button-share": 8, "button-options": 9, "touch-pad": 13
+            };
+
+            // Boutons
+            Object.keys(buttonMap).forEach(button => {
+                const btnElement = document.querySelector(`[data-name="${button}"]`);
+                if (btnElement) {
+                    if (gp.buttons[buttonMap[button]].pressed) {
+                        btnElement.classList.add("pressed");
+                    } else {
+                        btnElement.classList.remove("pressed");
+                    }
+                }
+            });
+
             // Joysticks (L3, R3)
             const stickMap = {
                 "stick-1": { axisX: 0, axisY: 1 },
@@ -290,15 +309,15 @@
                     stickElement.style.marginLeft = `${x}px`;
                     stickElement.style.marginTop = `${y}px`;
 
-                    // Inverser l'effet de rotation
-                    const rotateX = -x * 1; // Multiplied by -1 to invert the rotation direction
-                    const rotateY = -y * 1; // Multiplied by -1 to invert the rotation direction
+                    // Mettre à jour la transformation pour l'effet de rotation
+                    const rotateX = x * 1; // Multiplied by 1 for full movement range
+                    const rotateY = y * 1; // Multiplied by 1 for full movement range
                     stickElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                 }
             });
-        }
 
-        setInterval(updateGamepad, 100);
+            requestAnimationFrame(updateGamepad);
+        }
     </script>
 </body>
 </html>
