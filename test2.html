@@ -298,9 +298,9 @@
                 const stickElement = document.querySelector(`[data-name="${stick}"]`);
                 if (stickElement) {
                     const { axisX, axisY } = stickMap[stick];
-                    const x = gp.axes[axisX] * 50;
-                    const y = gp.axes[axisY] * 50;
-                    stickElement.style.transform = `translate(${x}px, ${y}px)`;
+                    const x = gp.axes[axisX] * 30; // Multiplied to get a reasonable range
+                    const y = gp.axes[axisY] * 30; // Multiplied to get a reasonable range
+                    stickElement.style.transform = `rotateX(${y}deg) rotateY(${x}deg)`;
                 }
             });
 
