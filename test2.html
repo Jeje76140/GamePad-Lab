@@ -11,7 +11,7 @@
         .ds4.disconnected div { display: none; }
         .abxy, .bumpers, .triggers, .dpad, .share-options, .touchpad { position: absolute; }
 
-        /* Cache les boutons par défaut */
+        /* Les boutons sont cachés par défaut */
         .button, .bumper, .trigger, .face, .back, .start {
             display: none;
         }
@@ -97,18 +97,22 @@
         function updateGamepad() {
             const gp = navigator.getGamepads()[0];
             if (!gp) return;
-            
+
             document.querySelectorAll("[data-name]").forEach(el => {
-                const buttonIndex = el.dataset.name.split("-")[1];
+                const buttonIndex = el.dataset.name.split("-")[1]; // On récupère le bouton correspondant
                 if (gp.buttons[buttonIndex]) {
                     const isPressed = gp.buttons[buttonIndex]?.pressed;
-                    el.classList.toggle("pressed", isPressed);
                     if (isPressed) {
-                        el.style.display = "block";  // Affiche le bouton seulement quand il est pressé
+                        el.classList.add("pressed");  // On ajoute la classe pour afficher le bouton
+                        el.style.display = "block";    // On rend le bouton visible
+                    } else {
+                        el.classList.remove("pressed"); // On enlève la classe pour masquer le bouton
+                        el.style.display = "none";        // On cache le bouton
                     }
                 }
             });
-            requestAnimationFrame(updateGamepad);
+
+            requestAnimationFrame(updateGamepad);  // On met à jour la manette à chaque frame
         }
     </script>
 </body>
