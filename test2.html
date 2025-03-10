@@ -38,7 +38,7 @@
             width: 55px;
             height: 55px;
             background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/button.png);
-            display: block; /* Assurer que les boutons sont visibles */
+            display: block;
         }
 
         .ds4 .button.pressed {
@@ -300,8 +300,14 @@
                     const { axisX, axisY } = stickMap[stick];
                     const x = gp.axes[axisX] * 22; // Multiplied to get a reasonable range between -22 and 22
                     const y = gp.axes[axisY] * 22; // Multiplied to get a reasonable range between -22 and 22
+
                     stickElement.style.marginLeft = `${x}px`;
                     stickElement.style.marginTop = `${y}px`;
+
+                    // Update transform for rotation effect
+                    const rotateX = x * 0.5; // Convert the movement to a degree rotation range
+                    const rotateY = y * 0.5; // Convert the movement to a degree rotation range
+                    stickElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                 }
             });
 
