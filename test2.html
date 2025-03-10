@@ -258,7 +258,41 @@
     </div>
 
     <script>
-        // Fonction pour la gestion des sticks
+        // Fonction pour la gestion des sticks et normalisation des axes
+        function fixAxes(stickObj) {
+            var startValue = +stickObj.axesConfig.lowValue;
+            var endValue = +stickObj.axesConfig.highValue;
+
+            var isFlipped = (endValue < startValue);
+
+            if (isFlipped) {
+                var temp = startValue;
+                startValue = endValue;
+                endValue = temp;
+            }
+
+            var zeroOffset = startValue * -1;
+            var axisVal = choiceValue(stickObj);
+
+            // En ajoutant le décalage à la valeur actuelle et à la valeur de fin, nous pouvons normaliser l'entrée
+            var newValue = (axisVal + zeroOffset) / (endValue + zeroOffset);
+
+            // Dans le cas où les valeurs de départ et de fin sont échangées, nous prenons en compte cette inversion
+            newValue = (isFlipped) ? (1 - newValue) : newValue;
+
+            switch (stickObj.axesConfig.type) {
+                case "trigger":
+                    break;
+                case "stick":
+                    newValue = (-1 + (newValue * 2)); // Normalisation spécifique pour le stick
+                    break;
+                default:
+                    setMapping(stickObj, {});
+                    return;
+            }
+            setMapping(stickObj, newValue);
+        }
+
         function setMapping(stickObj, setValue) {
             switch (typeof setValue) {
                 case "number":
@@ -275,58 +309,7 @@
                         remapObj[stickObj.targetType][stickObj.target].value = stickToButton(stickObj);
                     }
                     break;
-                default:
-                    break;
             }
-        }
-
-        window.addEventListener("gamepadconnected", () => {
-            document.querySelector(".ds4").classList.remove("disconnected");
-            updateGamepad();
-        });
-
-        window.addEventListener("gamepaddisconnected", () => {
-            document.querySelector(".ds4").classList.add("disconnected");
-        });
-
-        function updateGamepad() {
-            const gp = navigator.getGamepads()[0];
-            if (!gp) return;
-
-            const buttonMap = {
-                "button-cross": 0, "button-circle": 1, "button-square": 2, "button-triangle": 3,
-                "button-l1": 4, "button-r1": 5, "button-share": 8, "button-options": 9,
-                "button-dpad-top": 12, "button-dpad-bottom": 13, "button-dpad-left": 14,
-                "button-dpad-right": 15, "touch-pad": 17, "button-l2": 6, "button-r2": 7
-            };
-
-            Object.keys(buttonMap).forEach(button => {
-                const buttonElement = document.querySelector(`[data-name="${button}"]`);
-                if (buttonElement) {
-                    buttonElement.classList.toggle("pressed", gp.buttons[buttonMap[button]]?.pressed);
-                }
-            });
-
-            // Joysticks
-            const stickMap = {
-                "stick-1": { axisX: 0, axisY: 1 },
-                "stick-2": { axisX: 2, axisY: 3 }
-            };
-
-            Object.keys(stickMap).forEach(stick => {
-                const stickElement = document.querySelector(`[data-name="${stick}"]`);
-                if (stickElement) {
-                    const { axisX, axisY } = stickMap[stick];
-                    const x = gp.axes[axisX] * 22; // Multiplied to get a reasonable range between -22 and 22
-                    const y = gp.axes[axisY] * 22; // Multiplied to get a reasonable range between -22 and 22
-
-                    // Mise à jour de la position
-                    stickElement.style.marginLeft = `${y}px`; // Normal: Y moves left-right
-                    stickElement.style.marginTop = `${-x}px`; // Normal: X moves up-down
-                }
-            });
-
-            requestAnimationFrame(updateGamepad);
         }
     </script>
 </body>
