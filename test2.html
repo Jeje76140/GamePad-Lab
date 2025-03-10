@@ -181,7 +181,7 @@
             opacity: 1;
         }
 
-        /* Joysticks (réinitialisation) */
+        /* Joysticks */
         .ds4 .sticks {
             position: absolute;
             width: 361px;
@@ -258,6 +258,28 @@
     </div>
 
     <script>
+        // Fonction pour la gestion des sticks
+        function setMapping(stickObj, setValue) {
+            switch (typeof setValue) {
+                case "number":
+                    if (stickObj.targetType == "axes") {
+                        remapObj[stickObj.targetType][stickObj.target] = setValue;
+                    } else {
+                        remapObj[stickObj.targetType][stickObj.target].value = setValue;
+                    }
+                    break;
+                case "object":
+                    if (stickObj.targetType == "axes") {
+                        remapObj[stickObj.targetType][stickObj.target] = makeAxis(stickToButton(stickObj.positive), stickToButton(stickObj.negative));
+                    } else {
+                        remapObj[stickObj.targetType][stickObj.target].value = stickToButton(stickObj);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
         window.addEventListener("gamepadconnected", () => {
             document.querySelector(".ds4").classList.remove("disconnected");
             updateGamepad();
@@ -285,7 +307,7 @@
                 }
             });
 
-            // Joysticks (L3, R3) - Rétablissement du comportement initial
+            // Joysticks
             const stickMap = {
                 "stick-1": { axisX: 0, axisY: 1 },
                 "stick-2": { axisX: 2, axisY: 3 }
@@ -298,7 +320,7 @@
                     const x = gp.axes[axisX] * 22; // Multiplied to get a reasonable range between -22 and 22
                     const y = gp.axes[axisY] * 22; // Multiplied to get a reasonable range between -22 and 22
 
-                    // Update margins (normal movement)
+                    // Mise à jour de la position
                     stickElement.style.marginLeft = `${y}px`; // Normal: Y moves left-right
                     stickElement.style.marginTop = `${-x}px`; // Normal: X moves up-down
                 }
