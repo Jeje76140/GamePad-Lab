@@ -235,8 +235,28 @@
             }
         }
 
+        // Ajouter un événement pour simuler la pression des boutons
+        function setupButtonEvents() {
+            const buttons = document.querySelectorAll('.button');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Ajout de la classe pressed pour afficher l'effet visuel de pression
+                    this.classList.add('pressed');
+
+                    // Simule un délai de pression du bouton avant de retirer l'effet
+                    setTimeout(() => {
+                        this.classList.remove('pressed');
+                    }, 150);  // Le délai peut être ajusté selon le temps de pression
+                });
+            });
+        }
+
         // Appeler la fonction pour vérifier l'état de la connexion
         checkControllerConnection();
+
+        // Configurer les événements des boutons
+        setupButtonEvents();
     </script>
 </body>
 </html>
