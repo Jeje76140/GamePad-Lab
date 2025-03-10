@@ -296,14 +296,14 @@
 
             // Joysticks (L3, R3)
             const stickMap = {
-                "stick-1": { axisX: 0, axisY: 1 },
-                "stick-2": { axisX: 2, axisY: 3 }
+                "stick-1": { axisX: 0, axisY: 1, button: 10 }, // L3
+                "stick-2": { axisX: 2, axisY: 3, button: 11 }  // R3
             };
 
             Object.keys(stickMap).forEach(stick => {
                 const stickElement = document.querySelector(`[data-name="${stick}"]`);
                 if (stickElement) {
-                    const { axisX, axisY } = stickMap[stick];
+                    const { axisX, axisY, button } = stickMap[stick];
                     let x = gp.axes[axisX] * 22; // Multiplied to get a reasonable range between -22 and 22
                     let y = gp.axes[axisY] * 22; // Multiplied to get a reasonable range between -22 and 22
 
@@ -316,7 +316,7 @@
                     stickElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
                     // Appliquer la classe pressed si l'axe est cliqué (L3/R3)
-                    if (gp.buttons[10].pressed) {
+                    if (gp.buttons[button].pressed) {
                         stickElement.classList.add("pressed");
                     } else {
                         stickElement.classList.remove("pressed");
