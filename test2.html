@@ -304,9 +304,9 @@
                     stickElement.style.marginLeft = `${y}px`; // X axis: left-right movement
                     stickElement.style.marginTop = `${x}px`; // Y axis: up-down movement
 
-                    // Update transform for rotation effect
-                    const rotateX = -x * 1; // Inverted - X controls Y (up-down)
-                    const rotateY = -y * 1; // Inverted - Y controls X (left-right)
+                    // Update transform for rotation effect (Inverted X and Y only for transform)
+                    const rotateX = x * -1; // Inverted - X controls Y (up-down)
+                    const rotateY = y * -1; // Inverted - Y controls X (left-right)
                     stickElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                 }
             });
