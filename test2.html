@@ -255,8 +255,8 @@
         </div>
 
         <div class="sticks">
-            <span class="stick left" data-name="stick-1" style="margin-left: 0px; margin-top: 0px; transform: rotateX(0deg) rotateY(0deg);"></span>
-            <span class="stick right" data-name="stick-2" style="margin-left: 0px; margin-top: 0px; transform: rotateX(0deg) rotateY(0deg);"></span>
+            <span class="stick left" data-name="stick-1"></span>
+            <span class="stick right" data-name="stick-2"></span>
         </div>
     </div>
 
@@ -278,7 +278,8 @@
                 "button-cross": 0, "button-circle": 1, "button-square": 2, "button-triangle": 3,
                 "button-l1": 4, "button-r1": 5, "button-l2": 6, "button-r2": 7,
                 "button-dpad-top": 12, "button-dpad-bottom": 13, "button-dpad-left": 14, "button-dpad-right": 15,
-                "button-share": 8, "button-options": 9, "touch-pad": 17  // Touchpad remapped to 17
+                "button-share": 8, "button-options": 9, "touch-pad": 13,
+                "stick-1": 10, "stick-2": 11
             };
 
             // Boutons
@@ -313,6 +314,13 @@
                     const rotateX = x * 1; // Multiplied by 1 for full movement range
                     const rotateY = y * 1; // Multiplied by 1 for full movement range
                     stickElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+                    // Appliquer la classe pressed si l'axe est cliqué (L3/R3)
+                    if (gp.buttons[10].pressed) {
+                        stickElement.classList.add("pressed");
+                    } else {
+                        stickElement.classList.remove("pressed");
+                    }
                 }
             });
 
