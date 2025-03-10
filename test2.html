@@ -24,173 +24,70 @@
             display: none;
         }
 
-        /* Design des boutons Crois, Rond, Carré et Triangle */
-        .ds4 .abxy {
+        /* Flèches directionnelles */
+        .ds4 .dpad {
             position: absolute;
-            width: 170px;
-            height: 171px;
-            top: 159px;
-            left: 570px;
+            width: 126px;
+            height: 126px;
+            top: 189px;
+            left: 82px;
         }
 
-        .ds4 .button {
+        .ds4 .face {
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/arrows.png);
             position: absolute;
-            width: 55px;
-            height: 55px;
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/button.png);
         }
 
-        .ds4 .button.pressed {
-            background-position-y: 55px;
+        .ds4 .face.up, .ds4 .face.down {
+            width: 52px;
+            height: 63px;
         }
 
-        .ds4 .a {
-            background-position: 0 0;
-            bottom: 0;
-            left: 58px;
+        .ds4 .face.left, .ds4 .face.right {
+            width: 63px;
+            height: 63px;
         }
 
-        .ds4 .b {
-            background-position: -57px 0;
-            top: 58px;
-            right: 0px;
+        .ds4 .face.up {
+            left: 44px;
+            top: -14px;
+            background-position: -52px 126px;
         }
 
-        .ds4 .x {
-            background-position: -113px 0;
-            top: 58px;
-            left: 0px; /* Positionnement ajusté */
+        .ds4 .face.down {
+            left: 44px;
+            bottom: 0px;
+            background-position: 0px 0;
         }
 
-        .ds4 .y {
-            background-position: 55px 0;
-            left: 58px;
+        .ds4 .face.left {
+            top: 20px;
+            left: 0px;
+            background-position: -104px 126px;
         }
 
-        .ds4 .touchpad {
-            width: 265px;
-            height: 152px;
-            position: absolute;
-            left: 272px;
-            top: 123px;
-            background: none; /* Par défaut, il n'y a pas de fond */
+        .ds4 .face.right {
+            top: 18px;
+            right: -14px;
+            background-position: 63px 0;
         }
 
-        .ds4 .touchpad.pressed {
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/pad.png) no-repeat center;
-            background-size: cover;
+        .ds4 .face.pressed {
+            background-position-y: 63px;
         }
-
-        .ds4 .bumper {
-            width: 99px;
-            height: 23px;
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/bumper.png) no-repeat;
-            opacity: 0;
-        }
-
-        .ds4 .bumpers {
-            position: absolute;
-            width: 588px;
-            height: 23px;
-            left: 109px;
-            top: 95px;
-        }
-
-        .ds4 .bumper.pressed {
-            opacity: 1;
-        }
-
-        .ds4 .bumper.left {
-            float: left;
-        }
-
-        .ds4 .bumper.right {
-            position: absolute;
-            left: 492px;
-            transform: rotateY(180deg);
-            float: right;
-        }
-
-        .button, .trigger {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: lightgray;
-            border-radius: 50%;
-            line-height: 40px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .trigger {
-            width: 99px;
-            height: 100px;
-            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/tricker.png) no-repeat center;
-            background-size: contain;
-            opacity: 0;
-        }
-
-        .trigger.pressed {
-            opacity: 1;
-        }
-
-        .pressed { background: red; color: white; opacity: 1; }
-        .stick {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: blue;
-            border-radius: 50%;
-            transition: transform 0.1s linear;
-        }
-
-        #leftStick { left: 180px; bottom: 180px; }
-        #rightStick { right: 180px; bottom: 180px; }
-        #dpad-up { left: 110px; top: 240px; }
-        #dpad-down { left: 110px; top: 300px; }
-        #dpad-left { left: 70px; top: 270px; }
-        #dpad-right { left: 150px; top: 270px; }
-        #buttonCircle { right: 150px; top: 270px; }
-        #buttonSquare { right: 70px; top: 270px; }
-        #buttonTriangle { right: 110px; top: 240px; }
-        #buttonShare { left: 300px; top: 120px; }
-        #buttonOptions { right: 300px; top: 120px; }
-        #buttonPS { left: 380px; bottom: 60px; }
-        <div id="leftStick" class="stick"></div>
-        <div id="rightStick" class="stick"></div>
     </style>
 </head>
 <body>
     <h1>Afficheur Manette PS5</h1>
 
     <div class="controller ds4">
-        <!-- Regroupement des boutons Crois, Rond, Carré et Triangle -->
-        <div class="abxy">
-            <span class="button a" data-name="button-1"></span> <!-- Croix -->
-            <span class="button b" data-name="button-2"></span> <!-- Rond -->
-            <span class="button x" data-name="button-3"></span> <!-- Carré -->
-            <span class="button y" data-name="button-4"></span> <!-- Triangle -->
+        <!-- Flèches directionnelles -->
+        <div class="dpad">
+            <span class="face up" data-name="button-dpad-top"></span>
+            <span class="face down" data-name="button-dpad-bottom"></span>
+            <span class="face left" data-name="button-dpad-left"></span>
+            <span class="face right" data-name="button-dpad-right"></span>
         </div>
-
-        <!-- Zone du touchpad -->
-        <div class="touchpad" data-name="touch-pad"></div>
-
-        <!-- Zone des bumpers (L1 et R1) -->
-        <div class="bumpers">
-            <div class="bumper left"></div>
-            <div class="bumper right"></div>
-        </div>
-
-        <!-- Les autres boutons de la manette restent inchangés -->
-        <div id="dpad-up" class="button">▲</div>
-        <div id="dpad-down" class="button">▼</div>
-        <div id="dpad-left" class="button">◀</div>
-        <div id="dpad-right" class="button">▶</div>
-        <div id="buttonShare" class="button">SH</div>
-        <div id="buttonOptions" class="button">OP</div>
-        <div id="buttonPS" class="button">PS</div>
-        <div id="buttonL3" class="button">L3</div>
-        <div id="buttonR3" class="button">R3</div>
     </div>
 
     <script>
@@ -207,32 +104,16 @@
             const gp = navigator.getGamepads()[0];
             if (!gp) return;
 
-            // Associer les boutons A, B, X, Y avec les boutons de la manette PS5
             const buttonMap = {
-                "a": 0, // Croix
-                "b": 1, // Rond
-                "x": 2, // Carré
-                "y": 3, // Triangle
+                "up": 12, "down": 13, "left": 14, "right": 15 // Flèches directionnelles
             };
 
-            // Met à jour les classes des boutons A, B, X, Y
             Object.keys(buttonMap).forEach(button => {
                 const buttonElement = document.querySelector(`.ds4 .${button}`);
                 if (buttonElement) {
-                    // Si le bouton est pressé, ajoute la classe "pressed", sinon la supprime
                     buttonElement.classList.toggle("pressed", gp.buttons[buttonMap[button]]?.pressed);
                 }
             });
-
-            // Mise à jour pour le touchpad : vérifier le bouton spécifique pour le touchpad (index 17)
-            const touchpad = document.querySelector('.ds4 .touchpad');
-            touchpad.classList.toggle("pressed", gp.buttons[17]?.pressed); // Utilisation de l'index 17 pour le touchpad
-
-            // Mise à jour pour les bumpers : vérifier si L1 ou R1 est pressé
-            const leftBumper = document.querySelector('.ds4 .bumper.left');
-            const rightBumper = document.querySelector('.ds4 .bumper.right');
-            leftBumper.classList.toggle("pressed", gp.buttons[4]?.pressed);  // L1 est l'index 4
-            rightBumper.classList.toggle("pressed", gp.buttons[5]?.pressed); // R1 est l'index 5
 
             requestAnimationFrame(updateGamepad);
         }
