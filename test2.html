@@ -180,6 +180,40 @@
         .ds4 .trigger.pressed {
             opacity: 1;
         }
+
+        /* Joysticks */
+        .ds4 .sticks {
+            position: absolute;
+            width: 361px;
+            height: 105px;
+            top: 311px;
+            left: 227px;
+        }
+
+        .ds4 .stick {
+            position: absolute;
+            background: url(https://jeje76140.github.io/PS4_CONTROLLER/Akatsuki/stick.png);
+            height: 94px;
+            width: 94px;
+        }
+
+        .ds4 .stick.pressed.left {
+            background-position-x: -96px;
+        }
+
+        .ds4 .stick.pressed.right {
+            background-position-x: -192px;
+        }
+
+        .ds4 .stick.left {
+            top: 0;
+            left: 0;
+        }
+
+        .ds4 .stick.right {
+            top: calc(100% - 105px);
+            left: calc(100% - 102px);
+        }
     </style>
 </head>
 <body>
@@ -216,6 +250,11 @@
             <span class="trigger left" data-name="button-l2"></span>
             <span class="trigger right" data-name="button-r2"></span>
         </div>
+
+        <div class="sticks">
+            <span class="stick left" data-name="stick-1" style="margin-left: 0px; margin-top: 0px; transform: rotateX(0deg) rotateY(0deg);"></span>
+            <span class="stick right" data-name="stick-2" style="margin-left: 0px; margin-top: 0px; transform: rotateX(0deg) rotateY(0deg);"></span>
+        </div>
     </div>
 
     <script>
@@ -246,15 +285,19 @@
                 }
             });
 
-            // Triggers (L2, R2)
-            const triggerMap = {
-                "button-l2": 6, "button-r2": 7
+            // Joysticks (L3, R3)
+            const stickMap = {
+                "stick-1": { axisX: 0, axisY: 1 },
+                "stick-2": { axisX: 2, axisY: 3 }
             };
 
-            Object.keys(triggerMap).forEach(trigger => {
-                const triggerElement = document.querySelector(`[data-name="${trigger}"]`);
-                if (triggerElement) {
-                    triggerElement.classList.toggle("pressed", gp.buttons[triggerMap[trigger]]?.pressed);
+            Object.keys(stickMap).forEach(stick => {
+                const stickElement = document.querySelector(`[data-name="${stick}"]`);
+                if (stickElement) {
+                    const { axisX, axisY } = stickMap[stick];
+                    const x = gp.axes[axisX] * 50;
+                    const y = gp.axes[axisY] * 50;
+                    stickElement.style.transform = `translate(${x}px, ${y}px)`;
                 }
             });
 
