@@ -311,7 +311,7 @@
                     // Mettre à jour la transformation pour l'effet de rotation
                     const rotateX = x * 1; // Multiplied by 1 for full movement range
                     const rotateY = y * 1; // Multiplied by 1 for full movement range
-                    stickElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    stickElement.style.transform = `rotateX(${-rotateY}deg) rotateY(${rotateX}deg)`;
 
                     // Appliquer la classe pressed si l'axe est cliqué (L3/R3)
                     if (gp.buttons[button].pressed) {
